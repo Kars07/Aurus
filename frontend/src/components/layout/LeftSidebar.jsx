@@ -23,9 +23,9 @@ const LeftSidebar = () => {
   ];
 
   const navItemsTools = [
-    { icon: MessageCircleMore, label: "Chat", path: "/chat" },
+    { icon: MessageCircleMore, label: "Generate Report", path: "/chat" },
     { icon: Bot, label: "AI Support", path: "/ai-support" },
-    { icon: Phone, label: "Support", path: "#" },
+    { icon: Phone, label: "Contact a Doctor", path: "#" },
   ];
 
   return (
