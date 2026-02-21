@@ -17,7 +17,7 @@ const FlarePredictor = ({ telemetry }) => {
         .map(h => `[${new Date(h.timestamp).toLocaleString()}] Transcript: "${h.transcript}" | Nudge Delivered: "${h.nudge}"`)
         .join('\n');
 
-      const systemPrompt = `You are an advanced B2C predictive health AI. Here are the patient's recent history logs:\n${journalLogs}\n\nYou MUST call the 'aurus_reasoning' tool with these exact parameters:
+      const systemPrompt = `You are an advanced B2C predictive health AI. Here are the patient's recent history logs:\n${journalLogs}\n\nYou MUST call the 'auris_reasoning' tool with these exact parameters:
 - mode: "flare_predict"
 
 Do NOT attempt to pass the history logs into the tool call parameters.`;
@@ -65,9 +65,9 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
 
   if (loading) {
     return (
-      <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700 animate-pulse opacity-50 flex items-center justify-center">
-        <Activity className="w-8 h-8 text-cyan-400 animate-spin" />
-        <span className="text-slate-400 font-medium ml-3">Calculating Flare Risk...</span>
+      <div className="bg-white rounded-2xl p-6 border border-slate-200 animate-pulse opacity-50 flex items-center justify-center">
+        <Activity className="w-8 h-8 text-cyan-500 animate-spin" />
+        <span className="text-slate-500 font-medium ml-3">Calculating Flare Risk...</span>
       </div>
     );
   }
@@ -79,16 +79,16 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
   const bgColor = isHighRisk ? 'bg-red-500/10' : 'bg-cyan-500/10';
 
   return (
-    <div className={`rounded-2xl p-6 border ${isHighRisk ? 'border-red-500/50' : 'border-slate-700'} bg-slate-800 shadow-xl transition-all duration-500 relative overflow-hidden`}>
+    <div className={`rounded-2xl p-6 border ${isHighRisk ? 'border-red-500/50' : 'border-slate-200'} bg-white shadow-sm transition-all duration-500 relative overflow-hidden`}>
       {/* Decorative Background Blob */}
       <div className={`absolute -right-10 -top-10 w-40 h-40 rounded-full blur-3xl opacity-20 ${bgColor}`} />
 
       <div className="flex justify-between items-start mb-6">
         <div>
-          <h3 className="text-xl font-bold font-display text-white mb-1">Predictive Radar</h3>
-          <p className="text-sm text-slate-400">{isHighRisk ? 'High warning detected' : 'System nominal'}</p>
+          <h3 className="text-xl font-bold font-display text-slate-800 mb-1">Predictive Radar</h3>
+          <p className="text-sm text-slate-500">{isHighRisk ? 'High warning detected' : 'System nominal'}</p>
         </div>
-        {isHighRisk ? <AlertTriangle className="w-6 h-6 text-red-400" /> : <ShieldCheck className="w-6 h-6 text-cyan-400" />}
+        {isHighRisk ? <AlertTriangle className="w-6 h-6 text-red-500" /> : <ShieldCheck className="w-6 h-6 text-cyan-500" />}
       </div>
 
       <div className="flex items-center space-x-6">
@@ -97,7 +97,7 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
         <div className="relative w-24 h-24 flex-shrink-0">
           <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
             <path
-              className="text-slate-700 stroke-current"
+              className="text-slate-100 stroke-current"
               strokeWidth="3"
               fill="none"
               d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
@@ -113,19 +113,19 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <span className={`text-2xl font-bold ${ringColor}`}>{flareData.flare_risk_percentage}%</span>
-            <span className="text-[10px] text-slate-400 uppercase tracking-widest mt-1">Risk</span>
+            <span className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Risk</span>
           </div>
         </div>
 
         {/* Prediction Data */}
         <div className="flex-1">
-          <h4 className="text-lg font-bold text-white mb-1">
+          <h4 className="text-lg font-bold text-slate-800 mb-1">
             Likely {flareData.predicted_symptom}
           </h4>
-          <p className="text-sm text-slate-300 leading-relaxed mb-3">
+          <p className="text-sm text-slate-600 leading-relaxed mb-3">
             {flareData.reasoning}
           </p>
-          <div className={`text-sm px-3 py-2 rounded-lg ${isHighRisk ? 'bg-red-500/20 text-red-200' : 'bg-cyan-500/20 text-cyan-200'} font-medium`}>
+          <div className={`text-sm px-3 py-2 rounded-lg ${isHighRisk ? 'bg-red-50 text-red-800' : 'bg-cyan-50 text-cyan-800'} font-medium`}>
             <strong>Action:</strong> {flareData.preventative_action}
           </div>
         </div>

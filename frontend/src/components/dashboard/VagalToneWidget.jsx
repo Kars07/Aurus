@@ -42,12 +42,12 @@ const VagalToneWidget = () => {
   // CSS classes for the dramatic "stres" effect
   const cardBorder = isStressed && !isMeditating
     ? 'border-red-500/80 shadow-[0_0_15px_rgba(239,68,68,0.3)] animate-pulse'
-    : 'border-cyan-500/50 shadow-[0_0_15px_rgba(34,211,238,0.2)]';
+    : 'border-slate-200 shadow-sm';
 
-  const titleColor = isStressed && !isMeditating ? 'text-red-400' : 'text-cyan-400';
+  const titleColor = isStressed && !isMeditating ? 'text-red-500' : 'text-cyan-600';
 
   return (
-    <div className={`rounded-2xl p-6 bg-slate-800 transition-all duration-700 border-2 ${cardBorder} relative overflow-hidden`}>
+    <div className={`rounded-2xl p-6 bg-white transition-all duration-700 border-2 ${cardBorder} relative overflow-hidden`}>
       
       {/* Background stress texturing */}
       {isStressed && !isMeditating && (
@@ -59,7 +59,7 @@ const VagalToneWidget = () => {
           <h3 className={`text-xl font-bold font-display transition-colors duration-500 ${titleColor}`}>
             Vagal Tone Control
           </h3>
-          <p className="text-sm text-slate-400">Real-time nervous system biofeedback</p>
+          <p className="text-sm text-slate-500">Real-time nervous system biofeedback</p>
         </div>
         {!isMeditating && (
           <Activity className={`w-6 h-6 transition-colors duration-500 ${titleColor}`} />
@@ -68,23 +68,23 @@ const VagalToneWidget = () => {
 
       {!isMeditating ? (
         <div className="flex flex-col items-center justify-center py-4 relative z-10">
-          <div className="text-5xl font-bold text-white mb-2">
-            {Math.round(currentErraticism)}<span className="text-2xl text-slate-500">/100</span>
+          <div className="text-5xl font-bold text-slate-800 mb-2">
+            {Math.round(currentErraticism)}<span className="text-2xl text-slate-400">/100</span>
           </div>
-          <p className="text-sm text-slate-400 mb-6 uppercase tracking-widest">
+          <p className="text-sm text-slate-500 mb-6 uppercase tracking-widest">
             Cognitive Friction
           </p>
 
           {isStressed ? (
             <button
               onClick={() => setIsMeditating(true)}
-              className="px-6 py-3 bg-red-500/20 hover:bg-red-500/30 text-red-300 font-bold rounded-xl border border-red-500/50 transition-all flex items-center"
+              className="px-6 py-3 bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-xl border border-red-200 transition-all flex items-center"
             >
               <Wind className="w-5 h-5 mr-2" />
               Initiate Vagal Reset
             </button>
           ) : (
-            <div className="px-6 py-3 bg-cyan-500/10 text-cyan-300 font-medium rounded-xl border border-cyan-500/30 flex items-center">
+            <div className="px-6 py-3 bg-cyan-50 text-cyan-600 font-medium rounded-xl border border-cyan-100 flex items-center">
               <ShieldCheck className="w-5 h-5 mr-2" />
               Optimal Regulation
             </div>
@@ -109,13 +109,13 @@ const VagalToneWidget = () => {
                 ${breathePhase === 'Exhale' ? 'w-12 h-12 border-cyan-600' : ''}
               `} 
             />
-            <span className="text-cyan-300 font-bold tracking-widest uppercase z-10 animate-pulse">
+            <span className="text-cyan-600 font-bold tracking-widest uppercase z-10 animate-pulse">
               {breathePhase}
             </span>
           </div>
           <button
             onClick={() => { setIsMeditating(false); setManualOverride(null); }}
-            className="text-xs text-slate-500 hover:text-slate-300 uppercase tracking-widest"
+            className="text-xs text-slate-400 hover:text-slate-600 uppercase tracking-widest"
           >
             End Session
           </button>

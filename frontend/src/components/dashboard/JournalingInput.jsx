@@ -94,7 +94,7 @@ const JournalingInput = () => {
     const vocalStress = Math.round((telemetry.vocal_cadence || 1.0) * 100);
     const errat = Math.round((telemetry.keystroke_erraticism || 0) * 100);
 
-    const systemPrompt = `Analyze the patient's daily journal log. You must call the 'aurus_reasoning' tool with these exact parameters:
+    const systemPrompt = `Analyze the patient's daily journal log. You must call the 'auris_reasoning' tool with these exact parameters:
 - mode: "daily"
 - vocal_stress: ${vocalStress}
 - keystroke_erraticism: ${errat}

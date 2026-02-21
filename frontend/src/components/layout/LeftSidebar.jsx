@@ -7,11 +7,17 @@ import {
   LayoutDashboard,
   HistoryIcon,
   Phone,
+  Bot
 } from "lucide-react";
 
+import { Link, useLocation } from "react-router-dom";
+
 const LeftSidebar = () => {
+  const location = useLocation();
+  const currentPath = location.pathname;
+
   const navItemsGeneral = [
-    { icon: LayoutDashboard, label: "Dashboard", active: true },
+    { icon: LayoutDashboard, label: "Dashboard", path: "/" },
     { icon: HistoryIcon, label: "History" },
     { icon: CalendarRange, label: "Calendar" },
     { icon: SquarePlus, label: "Appointments" },
@@ -19,8 +25,9 @@ const LeftSidebar = () => {
   ];
 
   const navItemsTools = [
-    { icon: MessageCircleMore, label: "Chat" },
-    { icon: Phone, label: "Support" },
+    { icon: MessageCircleMore, label: "Chat", path: "/chat" },
+    { icon: Bot, label: "AI Support", path: "/ai-support" },
+    { icon: Phone, label: "Support", path: "#" },
   ];
 
   return (
@@ -29,28 +36,36 @@ const LeftSidebar = () => {
       <div>
         {/* Logo */}
         <h1 className="text-2xl font-bold text-cyan-400 mb-8">
-          Health<span className="text-gray-800">care.</span>
+          Au<span className="text-gray-800">ris.</span>
         </h1>
 
         {/* General Nav */}
         <div className="mb-6">
           <p className="text-gray-400 text-sm font-medium mb-4">General</p>
           <nav className="space-y-2">
-            {navItemsGeneral.map((item, index) => (
-              <div
-                key={index}
-                className={`flex items-center space-x-3 px-3 py-2 rounded-lg cursor-pointer hover:text-black hover:font-bold  ${
-                  item.active ? "text-black font-bold" : "text-gray-600"
-                }`}
-              >
-                <item.icon
-                  className={`w-5 h-5 ${item.active ? "text-black" : ""}`}
-                />
-                <span className={item.active ? "font-bold" : "font-medium"}>
-                  {item.label}
-                </span>
-              </div>
-            ))}
+            {navItemsGeneral.map((item, index) => {
+              const isActive = item.path ? currentPath === item.path : false;
+              return item.path ? (
+                <Link
+                  key={index}
+                  to={item.path}
+                  className={`flex items-center space-x-3 px-3 py-2 rounded-lg hover:text-black hover:font-bold transition-all ${
+                    isActive ? "text-black font-bold bg-slate-100" : "text-gray-600"
+                  }`}
+                >
+                  <item.icon className={`w-5 h-5 ${isActive ? "text-black" : ""}`} />
+                  <span className={isActive ? "font-bold" : "font-medium"}>{item.label}</span>
+                </Link>
+              ) : (
+                <div
+                  key={index}
+                  className="flex items-center space-x-3 px-3 py-2 rounded-lg cursor-not-allowed opacity-50 text-gray-600"
+                >
+                  <item.icon className="w-5 h-5" />
+                  <span className="font-medium">{item.label}</span>
+                </div>
+              );
+            })}
           </nav>
         </div>
 
@@ -58,21 +73,29 @@ const LeftSidebar = () => {
         <div>
           <p className="text-gray-400 text-sm font-medium mb-4">Tools</p>
           <nav className="space-y-2">
-            {navItemsTools.map((item, index) => (
-              <div
-                key={index}
-                className={`flex items-center space-x-3 px-3 py-2 rounded-lg cursor-pointer  hover:text-black hover:font-bold ${
-                  item.active ? "text-black font-bold" : "text-gray-600"
-                }`}
-              >
-                <item.icon
-                  className={`w-5 h-5 ${item.active ? "text-black" : ""}`}
-                />
-                <span className={item.active ? "font-bold" : "font-medium"}>
-                  {item.label}
-                </span>
-              </div>
-            ))}
+            {navItemsTools.map((item, index) => {
+              const isActive = item.path ? currentPath === item.path : false;
+              return item.path ? (
+                <Link
+                  key={index}
+                  to={item.path}
+                  className={`flex items-center space-x-3 px-3 py-2 rounded-lg hover:text-black hover:font-bold transition-all ${
+                    isActive ? "text-black font-bold bg-slate-100" : "text-gray-600"
+                  }`}
+                >
+                  <item.icon className={`w-5 h-5 ${isActive ? "text-black" : ""}`} />
+                  <span className={isActive ? "font-bold" : "font-medium"}>{item.label}</span>
+                </Link>
+              ) : (
+                <div
+                  key={index}
+                  className="flex items-center space-x-3 px-3 py-2 rounded-lg cursor-not-allowed opacity-50 text-gray-600"
+                >
+                  <item.icon className="w-5 h-5" />
+                  <span className="font-medium">{item.label}</span>
+                </div>
+              );
+            })}
           </nav>
         </div>
       </div>

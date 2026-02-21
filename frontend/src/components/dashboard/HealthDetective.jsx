@@ -21,7 +21,7 @@ const HealthDetective = () => {
       .map(h => `[${new Date(h.timestamp).toLocaleString()}] Transcript: "${h.transcript}" | Nudge Delivered: "${h.nudge}"`)
       .join('\n');
 
-    const systemPrompt = `You are a hyper-intelligent B2C Health Detective AI. Here are the patient's recent history logs:\n${journalLogs}\n\nYou MUST call the 'aurus_reasoning' tool with these exact parameters:
+    const systemPrompt = `You are a hyper-intelligent B2C Health Detective AI. Here are the patient's recent history logs:\n${journalLogs}\n\nYou MUST call the 'auris_reasoning' tool with these exact parameters:
 - mode: "investigate"
 - transcript: "${query}"
 
@@ -66,14 +66,14 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
   };
 
   return (
-    <div className="rounded-2xl p-6 bg-slate-800 border border-slate-700 shadow-xl overflow-hidden relative">
+    <div className="rounded-2xl p-6 bg-white border border-slate-200 shadow-sm overflow-hidden relative">
       <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
         <Sparkles className="w-24 h-24 text-indigo-400" />
       </div>
 
       <div className="mb-6 relative z-10">
-        <h3 className="text-xl font-bold font-display text-white mb-1">Health Detective</h3>
-        <p className="text-sm text-slate-400">Ask the AI to cross-reference your history logs.</p>
+        <h3 className="text-xl font-bold font-display text-slate-800 mb-1">Health Detective</h3>
+        <p className="text-sm text-slate-500">Ask the AI to cross-reference your history logs.</p>
       </div>
 
       <form onSubmit={handleInvestigate} className="relative z-10 mb-4">
@@ -83,12 +83,12 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="e.g. 'Why did I feel so stiff on Thursday?'"
-            className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 pl-4 pr-12 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+            className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl py-3 pl-4 pr-12 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors"
           />
           <button
             type="submit"
             disabled={isSearching}
-            className="absolute right-2 top-2 p-1.5 bg-indigo-500/20 text-indigo-400 hover:bg-indigo-500/40 rounded-lg transition-colors disabled:opacity-50"
+            className="absolute right-2 top-2 p-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg transition-colors disabled:opacity-50"
           >
             {isSearching ? <Loader2 className="w-5 h-5 animate-spin" /> : <Search className="w-5 h-5" />}
           </button>
@@ -97,18 +97,18 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
 
       {/* Results Area */}
       {result && (
-        <div className="mt-4 p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/30 relative z-10 animate-fade-in-up">
+        <div className="mt-4 p-4 rounded-xl bg-indigo-50 border border-indigo-100 relative z-10 animate-fade-in-up">
           <div className="flex items-center space-x-2 mb-2">
-            <AlertCircle className="w-4 h-4 text-indigo-400" />
-            <h4 className="text-sm font-bold text-indigo-300 uppercase tracking-widest">
+            <AlertCircle className="w-4 h-4 text-indigo-600" />
+            <h4 className="text-sm font-bold text-indigo-800 uppercase tracking-widest">
               Pattern Found: {result.detected_pattern}
             </h4>
           </div>
-          <p className="text-slate-300 text-sm leading-relaxed mb-3">
+          <p className="text-slate-700 text-sm leading-relaxed mb-3">
             {result.answer}
           </p>
-          <div className="text-xs font-semibold px-2 py-1 rounded bg-slate-900/50 text-slate-400 inline-block">
-            Confidence: <span className={result.confidence === 'High' ? 'text-green-400' : 'text-amber-400'}>{result.confidence}</span>
+          <div className="text-xs font-semibold px-2 py-1 rounded bg-slate-100 text-slate-500 inline-block">
+            Confidence: <span className={result.confidence === 'High' ? 'text-green-600' : 'text-amber-600'}>{result.confidence}</span>
           </div>
         </div>
       )}

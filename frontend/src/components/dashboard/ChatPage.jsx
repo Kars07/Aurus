@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { X, Shield, Printer, Activity, AlertCircle } from 'lucide-react';
+import { Shield, Printer, Activity, AlertCircle } from 'lucide-react';
 import html2pdf from 'html2pdf.js';
 import { useHistory } from '../../context/HistoryContext';
 
-const AdvocateModal = ({ isOpen, onClose }) => {
+const ChatPage = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const { history, addEntry } = useHistory();
@@ -18,7 +18,7 @@ const AdvocateModal = ({ isOpen, onClose }) => {
       .map(h => `[${new Date(h.timestamp).toLocaleString()}] Transcript: "${h.transcript}" | Nudge Delivered: "${h.nudge}"`)
       .join('\n');
       
-    const systemPrompt = `You are a hostile, patient-side medical advocate AI. Here are the patient's recent history logs:\n${journalLogs}\n\nYou MUST call the 'aurus_reasoning' tool with these exact parameters:
+    const systemPrompt = `You are a hostile, patient-side medical advocate AI. Here are the patient's recent history logs:\n${journalLogs}\n\nYou MUST call the 'auris_reasoning' tool with these exact parameters:
 - mode: "advocate"
 
 Do NOT attempt to pass the history logs into the tool parameters.`;
@@ -91,34 +91,28 @@ Do NOT attempt to pass the history logs into the tool parameters.`;
     html2pdf().set(opt).from(element).save();
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-      <div className="bg-slate-900 w-full max-w-4xl rounded-3xl shadow-2xl border border-indigo-500/30 overflow-hidden flex flex-col max-h-[90vh]">
-        
+    <main className="flex-1 overflow-y-auto min-h-full bg-transparent text-slate-800 flex flex-col">
+      <div className="max-w-4xl mx-auto w-full p-4 md:p-8 flex-1 flex flex-col">
         {/* Header */}
-        <div className="flex justify-between items-center p-6 bg-slate-800 border-b border-slate-700">
-          <div className="flex items-center space-x-3">
-            <div className="p-3 bg-indigo-500/20 rounded-xl">
-              <Shield className="w-8 h-8 text-indigo-400" />
+        <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-200">
+          <div className="flex items-center space-x-4">
+            <div className="p-3 bg-indigo-50 rounded-xl">
+              <Shield className="w-8 h-8 text-indigo-600" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-white font-display uppercase tracking-wider">Advocate Brief</h2>
-              <p className="text-slate-400 text-sm">Anti-Gaslighting Verification Protocol</p>
+              <h1 className="text-3xl font-black font-display text-slate-900 tracking-tight mb-1">Advocate AI Chat</h1>
+              <p className="text-slate-500 font-medium">Anti-Gaslighting Verification Protocol</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 text-slate-400 hover:text-white hover:bg-slate-700 rounded-full transition-colors">
-            <X className="w-8 h-8" />
-          </button>
         </div>
 
         {/* Action Bar */}
-        <div className="flex px-6 py-4 space-x-4 bg-slate-800/50 border-b border-slate-700">
-           <button
+        <div className="flex space-x-4 mb-6">
+          <button
             onClick={fetchAdvocateBrief}
             disabled={loading}
-            className="flex-1 py-3 px-6 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-indigo-500/25 transition-all flex items-center justify-center disabled:opacity-50"
+            className="flex-1 py-4 px-6 bg-[#3835AC] hover:bg-indigo-800 text-white font-bold rounded-xl shadow-md transition-all flex items-center justify-center disabled:opacity-50"
           >
             {loading ? <Activity className="w-5 h-5 mr-3 animate-spin" /> : <Shield className="w-5 h-5 mr-3" />}
             {loading ? 'Synthesizing Argument...' : 'Generate New Brief'}
@@ -127,7 +121,7 @@ Do NOT attempt to pass the history logs into the tool parameters.`;
           <button 
             disabled={!data || loading}
             onClick={handleExportPDF}
-            className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl transition-all flex items-center justify-center disabled:opacity-50"
+            className="px-6 py-4 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold rounded-xl transition-all flex items-center justify-center disabled:opacity-50 shadow-sm"
           >
             <Printer className="w-5 h-5 mr-2" />
             Print to Hand to Doctor
@@ -135,70 +129,72 @@ Do NOT attempt to pass the history logs into the tool parameters.`;
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-8" ref={printRef}>
+        <div className="flex-1 bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden relative" ref={printRef}>
           {!data && !loading ? (
-            <div className="flex flex-col items-center justify-center h-full text-slate-500 py-12">
-              <Shield className="w-16 h-16 mb-4 opacity-50" />
-              <p className="text-lg">Click generate to compile your irrefutable data brief.</p>
+            <div className="flex flex-col items-center justify-center h-full text-slate-400 py-24 px-8 text-center bg-slate-50">
+              <Shield className="w-20 h-20 mb-6 opacity-30 text-slate-400" />
+              <h2 className="text-2xl font-bold text-slate-600 mb-2">Ready to compile your brief</h2>
+              <p className="text-lg text-slate-500 max-w-lg">Click the button above to generate an irrefutable, data-backed brief for your next doctor's appointment.</p>
             </div>
           ) : data ? (
-            <div className="space-y-8 bg-white text-slate-900 p-8 rounded-xl shadow-inner border-2 border-slate-200">
+            <div className="p-8 md:p-12 space-y-8 text-slate-900 bg-white">
               
-              <div className="border-b-4 border-indigo-900 pb-4 mb-6">
-                <h1 className="text-3xl font-black uppercase text-indigo-900 mb-2">Patient Advocate Brief</h1>
+              <div className="border-b-4 border-indigo-900 pb-4 mb-8">
+                <h1 className="text-4xl font-black uppercase text-indigo-900 mb-2">Patient Advocate Brief</h1>
                 <div className="flex justify-between text-sm font-bold text-slate-500">
-                  <span>SYSTEM: EmpowerLink Telemetry Check</span>
+                  <span>SYSTEM: Auris Telemetry Check</span>
                   <span>DATE: {new Date().toLocaleDateString()}</span>
                 </div>
               </div>
 
               <div>
-                <h3 className="text-lg font-bold text-indigo-900 uppercase tracking-widest mb-3 border-b-2 border-indigo-100 pb-2">Data-Backed Synthesis</h3>
-                <p className="text-slate-700 leading-relaxed font-serif text-lg">
+                <h3 className="text-xl font-bold text-indigo-900 uppercase tracking-widest mb-4 border-b-2 border-indigo-100 pb-2">Data-Backed Synthesis</h3>
+                <p className="text-slate-700 leading-relaxed font-serif text-xl">
                   {data.advocate_brief}
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="bg-rose-50 rounded-xl p-6 border border-rose-200 shadow-sm">
-                  <h3 className="text-rose-900 font-bold uppercase tracking-widest mb-4 flex items-center">
-                    <AlertCircle className="w-5 h-5 mr-2" /> Demanded Tests/Actions
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6">
+                <div className="bg-rose-50 rounded-2xl p-8 border border-rose-200 shadow-sm">
+                  <h3 className="text-rose-900 font-bold uppercase tracking-widest mb-6 flex items-center">
+                    <AlertCircle className="w-6 h-6 mr-3" /> Demanded Tests/Actions
                   </h3>
-                  <ul className="space-y-3">
+                  <ul className="space-y-4">
                     {data.demanded_tests.map((test, i) => (
                       <li key={i} className="flex items-start">
-                        <span className="w-6 h-6 rounded-full bg-rose-200 text-rose-800 flex items-center justify-center text-xs font-bold mr-3 mt-0.5 flex-shrink-0">{i+1}</span>
-                        <span className="text-rose-950 font-medium">{test}</span>
+                        <span className="w-8 h-8 rounded-full bg-rose-200 text-rose-800 flex items-center justify-center text-sm font-bold mr-4 flex-shrink-0">{i+1}</span>
+                        <span className="text-rose-950 font-medium text-lg pt-0.5">{test}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                <div className="bg-indigo-50 rounded-xl p-6 border border-indigo-200 shadow-sm">
-                  <h3 className="text-indigo-900 font-bold uppercase tracking-widest mb-4 flex items-center">
-                    <Shield className="w-5 h-5 mr-2" /> Exact Script to Read
+                <div className="bg-indigo-50 rounded-2xl p-8 border border-indigo-200 shadow-sm">
+                  <h3 className="text-indigo-900 font-bold uppercase tracking-widest mb-6 flex items-center">
+                    <Shield className="w-6 h-6 mr-3" /> Exact Script to Read
                   </h3>
-                  <div className="relative">
-                    <span className="absolute -top-4 -left-2 text-6xl text-indigo-200 font-serif leading-none">"</span>
-                    <p className="text-indigo-950 font-medium italic relative z-10 pt-2 pb-2 pl-4 text-lg">
+                  <div className="relative h-full">
+                    <span className="absolute -top-4 -left-2 text-7xl text-indigo-200 font-serif leading-none">"</span>
+                    <p className="text-indigo-950 font-medium italic relative z-10 pt-4 pb-2 pl-6 text-xl">
                       {data.script}
                     </p>
-                    <span className="absolute -bottom-8 -right-2 text-6xl text-indigo-200 font-serif leading-none rotate-180">"</span>
+                    <span className="absolute bottom-0 right-2 text-7xl text-indigo-200 font-serif leading-none rotate-180">"</span>
                   </div>
                 </div>
               </div>
 
             </div>
           ) : (
-             <div className="flex flex-col items-center justify-center h-full text-slate-500 py-12">
-              <Activity className="w-16 h-16 animate-spin text-indigo-500 mb-4" />
-              <p className="text-lg animate-pulse text-indigo-400">Armoring patient data...</p>
+             <div className="flex flex-col items-center justify-center h-full text-slate-500 py-32 bg-slate-50">
+              <Activity className="w-20 h-20 animate-spin text-indigo-600 mb-6" />
+              <h2 className="text-2xl font-bold text-indigo-900 mb-2">Armoring patient data...</h2>
+              <p className="text-lg animate-pulse text-indigo-600">Cross-referencing logs and telemetry.</p>
             </div>
           )}
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 
-export default AdvocateModal;
+export default ChatPage;

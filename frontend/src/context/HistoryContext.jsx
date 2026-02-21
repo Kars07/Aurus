@@ -8,7 +8,7 @@ export const HistoryProvider = ({ children }) => {
   const [history, setHistory] = useState([]);
 
   useEffect(() => {
-    const saved = localStorage.getItem('empowerLink_history');
+    const saved = localStorage.getItem('auris_history');
     if (saved) {
       try {
         setHistory(JSON.parse(saved));
@@ -27,14 +27,14 @@ export const HistoryProvider = ({ children }) => {
     
     setHistory(prev => {
       const updated = [newEntry, ...prev];
-      localStorage.setItem('empowerLink_history', JSON.stringify(updated));
+      localStorage.setItem('auris_history', JSON.stringify(updated));
       return updated;
     });
   };
 
   const clearHistory = () => {
     setHistory([]);
-    localStorage.removeItem('empowerLink_history');
+    localStorage.removeItem('auris_history');
   };
 
   return (

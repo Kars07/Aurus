@@ -1,10 +1,8 @@
 import React from 'react';
-import JournalingInput from '../dashboard/JournalingInput';
 import ActivityFeed from '../dashboard/ActivityFeed';
 import AegisOverlay from '../dashboard/AegisOverlay';
 import FlarePredictor from '../dashboard/FlarePredictor';
 import VagalToneWidget from '../dashboard/VagalToneWidget';
-import HealthDetective from '../dashboard/HealthDetective';
 import AnatomySection from '../dashboard/AnatomySection';
 import { useAegisTelemetry } from '../../hooks/useAegisTelemetry';
 
@@ -12,18 +10,18 @@ const DashboardMainContent = () => {
   const { triggerManualCrash } = useAegisTelemetry();
 
   return (
-    <main className="flex-1 overflow-y-auto min-h-full bg-[#0B0F19] text-slate-200">
+    <main className="flex-1 overflow-y-auto min-h-full bg-transparent text-slate-800">
       <AegisOverlay />
       <div className="max-w-7xl mx-auto p-4 md:p-8">
         
         {/* Top Header */}
         <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between">
           <div>
-            <h1 className="text-4xl font-black font-display text-white tracking-tight mb-2">My Health Command</h1>
-            <p className="text-indigo-400 font-medium tracking-wide uppercase text-sm">EmpowerLink Continuous Telemetry Active</p>
+            <h1 className="text-4xl font-black font-display text-slate-900 tracking-tight mb-2">My Health Command</h1>
+            <p className="text-[#3835AC] font-medium tracking-wide uppercase text-sm">Auris Continuous Telemetry Active</p>
           </div>
           <div className="flex gap-3 mt-4 md:mt-0">
-            <button className="hidden md:block text-sm font-bold text-indigo-400 hover:text-indigo-300 transition-colors bg-indigo-500/10 px-4 py-2 rounded-xl">
+            <button className="hidden md:block text-sm font-bold text-[#3835AC] hover:text-indigo-800 transition-colors bg-[#3835AC]/10 px-4 py-2 rounded-xl">
               Past 7 Days ▼
             </button>
           </div>
@@ -42,11 +40,9 @@ const DashboardMainContent = () => {
         {/* Main Interaction Area */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div className="lg:col-span-8 flex flex-col gap-6">
-            <JournalingInput />
-            <HealthDetective />
+            <AnatomySection />
           </div>
           <div className="lg:col-span-4 flex flex-col gap-6">
-            <AnatomySection />
             <ActivityFeed />
           </div>
         </div>

@@ -12,7 +12,7 @@ export const upcomingAppointments = [
   },
   {
     id: 2,
-    title: 'EmpowerLink Data Review',
+    title: 'Auris Data Review',
     time: '14:00 PM',
     day: 'Thursday',
     type: 'specialist',

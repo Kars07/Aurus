@@ -36,8 +36,8 @@ const DoctorSnapshotModal = ({ isOpen, onClose }) => {
       .map(h => `[${new Date(h.timestamp).toLocaleString()}] Transcript: "${h.transcript}" | Nudge Delivered: "${h.nudge}"`)
       .join('\n');
       
-    const systemPrompt = `You are generating a clinical snapshot. Here are the patient's recent history logs:\n${journalLogs}\n\nYou MUST call the 'aurus_reasoning' tool with these exact parameters:
-- mode: "clinical"
+    const systemPrompt = `You are generating a clinical snapshot. Here are the patient's recent history logs:\n${journalLogs}\n\nYou MUST call the 'auris_reasoning' tool with these exact parameters:
+- mode: "snapshot"
 
 Do NOT attempt to pass the history logs into the tool call parameters.`;
     
@@ -133,7 +133,7 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
               <FileText className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h2 className="text-xl font-bold">EmpowerLink Clinical Synthesis</h2>
+              <h2 className="text-xl font-bold">Auris Clinical Synthesis</h2>
               <p className="text-sm text-blue-200 font-medium">Standardized FHIR-Compliant Output • v2.1</p>
             </div>
           </div>
@@ -258,7 +258,7 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
                   <MessageCircle className="w-5 h-5 text-cyan-600" />
                   <h4 className="font-bold text-gray-800">Suggested Collaborative Questions</h4>
                 </div>
-                <p className="text-xs text-gray-500 mb-3 border-b pb-2">EmpowerLink suggests asking your doctor these questions based on this week's data:</p>
+                <p className="text-xs text-gray-500 mb-3 border-b pb-2">Auris suggests asking your doctor these questions based on this week's data:</p>
                 <div className="space-y-3">
                   {data?.patient_questions_for_doctor.map((q, index) => (
                     <div key={index} className="p-3 bg-cyan-50 rounded-lg text-sm font-medium text-cyan-900 border border-cyan-100">
