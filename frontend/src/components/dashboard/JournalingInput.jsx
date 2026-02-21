@@ -1,14 +1,19 @@
 import React, { useState, useRef } from 'react';
 import { Mic, Square, Sparkles } from 'lucide-react';
 import { useAegisTelemetry } from '../../hooks/useAegisTelemetry';
+import { useHistory } from '../../context/HistoryContext';
 
 const JournalingInput = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState('');
+  const [manualText, setManualText] = useState('');
   const [nudge, setNudge] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const { telemetry } = useAegisTelemetry();
+  const { addEntry } = useHistory();
   const mediaRecorderRef = useRef(null);
+  const recognitionRef = useRef(null);
+  const transcriptRef = useRef('');
 
   const startRecording = async () => {
     try {
@@ -17,12 +22,31 @@ const JournalingInput = () => {
       mediaRecorderRef.current.start();
       setIsRecording(true);
       setTranscript('');
+      transcriptRef.current = '';
       setNudge('');
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        recognitionRef.current = new SpeechRecognition();
+        recognitionRef.current.continuous = true;
+        recognitionRef.current.interimResults = true;
+        
+        recognitionRef.current.onresult = (event) => {
+          let currentTranscript = '';
+          for (let i = 0; i < event.results.length; i++) {
+            currentTranscript += event.results[i][0].transcript;
+          }
+          setTranscript(currentTranscript);
+          transcriptRef.current = currentTranscript;
+        };
+        recognitionRef.current.start();
+      }
     } catch (err) {
       console.error("Microphone access denied or error:", err);
       // Fallback for demo without microphone access
       setIsRecording(true);
       setTranscript('');
+      transcriptRef.current = '';
       setNudge('');
     }
   };
@@ -32,37 +56,100 @@ const JournalingInput = () => {
       mediaRecorderRef.current.stop();
       mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
     }
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+    }
     setIsRecording(false);
-    processVoiceLog();
+    
+    // Give the Web Speech API a moment to capture the final word
+    setTimeout(() => {
+      processVoiceLog(transcriptRef.current);
+    }, 500);
   };
 
-  const processVoiceLog = async () => {
+  const handleManualSubmit = () => {
+    if (!manualText.trim()) return;
+    processVoiceLog(manualText);
+  };
+
+  const processVoiceLog = async (finalTranscript) => {
     setIsProcessing(true);
     
-    // Simulate user input for demo
-    setTranscript("My lower back is killing me and I only got 4 hours of sleep.");
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let textToProcess = finalTranscript || transcript;
+    
+    // Only apply the speech API error if they actually pressed the mic button (finalTranscript/transcript empty but manualText is also empty)
+    if (!textToProcess && !manualText) {
+      if (!SpeechRecognition) {
+        textToProcess = "[Speech Recognition API not supported in this browser. Please use Chrome/Edge or ensure microphone permissions.]";
+      } else {
+        textToProcess = "[No speech detected. Please hold the button and speak clearly.]";
+      }
+    }
+    
+    setTranscript(textToProcess);
+    setManualText(''); // Clear manual input after submission
+
+    // Prepare NAT prompt
+    const vocalStress = Math.round((telemetry.vocal_cadence || 1.0) * 100);
+    const errat = Math.round((telemetry.keystroke_erraticism || 0) * 100);
+
+    const systemPrompt = `Analyze the patient's daily journal log. You must call the 'aurus_reasoning' tool with these exact parameters:
+- mode: "daily"
+- vocal_stress: ${vocalStress}
+- keystroke_erraticism: ${errat}
+- transcript: "${textToProcess}"`;
 
     try {
-      // Try to hit real backend if available
-      const response = await fetch(import.meta.env.VITE_API_URL + '/api/journal', {
+      // Hit NAT Agent Server via Vite Proxy
+      const response = await fetch('/v1/chat/completions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ 
-          text: "My lower back is killing me and I only got 4 hours of sleep.",
-          telemetry: telemetry
+          messages: [{ role: 'user', content: systemPrompt }],
+          model: 'nvidia/nemotron',
+          temperature: 0.1,
+          stream: false
         }),
       });
+      
       const data = await response.json();
-      setNudge(data.nudge || "Activity is low and pain is high. You are at risk for a pressure sore today. Here are 3 gentle seated torso twists you can do right now.");
-    } catch {
+      let content = data.choices[0].message.content;
+      
+      // Highly robust JSON extractor to strip out "Thought:", "Final Answer:", and Markdown wrappers
+      const firstBrace = content.indexOf('{');
+      const lastBrace = content.lastIndexOf('}');
+      
+      if (firstBrace !== -1 && lastBrace !== -1) {
+        content = content.substring(firstBrace, lastBrace + 1);
+      } else {
+        throw new Error("No JSON object found in the LLM response.");
+      }
+      
+      const payload = JSON.parse(content);
+      
+      const savedNudge = payload.patient_facing_nudge || "I hear you. Let me know if you need any specific exercises or support.";
+      setNudge(savedNudge);
+      
+      addEntry({
+        type: 'journal',
+        transcript: textToProcess,
+        nudge: savedNudge
+      });
+    } catch (err) {
+      console.error("NAT Agent Error:", err);
       // Fallback nudge for Hackathon Magic Moment
       setTimeout(() => {
-        setNudge("Activity is low and pain is high. You are at risk for a pressure sore today. Here are 3 gentle seated torso twists you can do right now.");
-        setIsProcessing(false);
+        const fallbackNudge = "I hear you. Activity and pain markers are concerning. Try taking some deep breaths and stretching out for a minute.";
+        setNudge(fallbackNudge);
+        addEntry({
+          type: 'journal',
+          transcript: textToProcess,
+          nudge: fallbackNudge
+        });
       }, 1500);
-      return;
     }
     setIsProcessing(false);
   };
@@ -109,6 +196,28 @@ const JournalingInput = () => {
       </div>
 
       {/* Transcript & Nudge Area */}
+      <div className="mt-8">
+        <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wider pl-1 mb-2">Or type manually:</h4>
+        <div className="flex gap-2">
+          <input 
+            type="text" 
+            value={manualText}
+            onChange={(e) => setManualText(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleManualSubmit()}
+            placeholder="I'm feeling a bit stiff today..."
+            className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-shadow"
+            disabled={isProcessing}
+          />
+          <button 
+            onClick={handleManualSubmit}
+            disabled={isProcessing || !manualText.trim()}
+            className="bg-gray-900 hover:bg-gray-800 disabled:bg-gray-300 text-white px-6 py-3 rounded-xl font-medium transition-colors"
+          >
+            Send
+          </button>
+        </div>
+      </div>
+
       <div className="mt-6 min-h-[8rem] bg-[#F6FAFF] rounded-xl p-5 border border-blue-50">
         {isProcessing && (
           <div className="flex items-center justify-center h-full text-cyan-600 space-x-2">

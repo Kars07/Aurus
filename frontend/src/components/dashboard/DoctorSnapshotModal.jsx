@@ -1,6 +1,7 @@
-import React from 'react';
-import { X, FileText, Activity, AlertTriangle, MessageCircle, Download } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, FileText, Activity, AlertTriangle, MessageCircle, Download, Loader2 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { useHistory } from '../../context/HistoryContext';
 
 const mockTrendData = [
   { day: 'Mon', stress: 3, pain: 4, interventions: 0 },
@@ -13,6 +14,112 @@ const mockTrendData = [
 ];
 
 const DoctorSnapshotModal = ({ isOpen, onClose }) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const { history, addEntry } = useHistory();
+
+  useEffect(() => {
+    if (isOpen) {
+      fetchClinicalData();
+    } else {
+      setData(null);
+    }
+  }, [isOpen]);
+
+  const fetchClinicalData = async () => {
+    setLoading(true);
+    
+    // Format history logs
+    const journalLogs = history
+      .filter(h => h.type === 'journal')
+      .slice(0, 10) // Limit to recent 10 to avoid token limits
+      .map(h => `[${new Date(h.timestamp).toLocaleString()}] Transcript: "${h.transcript}" | Nudge Delivered: "${h.nudge}"`)
+      .join('\n');
+      
+    const systemPrompt = `You are generating a clinical snapshot. Here are the patient's recent history logs:\n${journalLogs}\n\nYou MUST call the 'aurus_reasoning' tool with these exact parameters:
+- mode: "clinical"
+
+Do NOT attempt to pass the history logs into the tool call parameters.`;
+    
+    try {
+      const response = await fetch('/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          messages: [{ role: 'user', content: systemPrompt }],
+          model: 'nvidia/nemotron',
+          temperature: 0.1,
+          stream: false
+        }),
+      });
+      
+      const responseData = await response.json();
+      let content = responseData.choices[0].message.content;
+      
+      // Highly robust JSON extractor to strip out "Thought:", "Final Answer:", and Markdown wrappers
+      const firstBrace = content.indexOf('{');
+      const lastBrace = content.lastIndexOf('}');
+      
+      if (firstBrace !== -1 && lastBrace !== -1) {
+        content = content.substring(firstBrace, lastBrace + 1);
+      } else {
+        throw new Error("No JSON object found in the LLM response.");
+      }
+      
+      const payload = JSON.parse(content);
+      setData(payload);
+      addEntry({
+        type: 'snapshot',
+        data: payload
+      });
+    } catch (err) {
+      console.error("NAT Agent Error:", err);
+      // Fallback if NAT is unavailable
+      const fallbackPayload = {
+        report_date: "2026-02-21",
+        patient_status: {
+          hpi: "Patient reports feeling severe joint stiffness today. Activity has been extremely limited.",
+          objective: "Telemetry indicates low mobility. High keystroke erraticism and vocal stress.",
+          assessment: "M25.60 - Stiffness of unspecified joint, not elsewhere classified. Suspected inflammation exacerbation.",
+          plan: "1. Advise immediate use of prescribed NSAIDs.\n2. Recommend gentle passive range-of-motion exercises.\n3. Schedule follow-up tele-visit in 48 hours."
+        },
+        prevention_flags: [
+          "High Intervention Rate: Patient required 7 digital interventions (Aegis Protocol) for fatigue/pain this week. Suspect physical strain or medication tolerance building mid-week.",
+          "Sleep/Pain Cycle: Voice logs consistently link 4-hour sleep nights with a +3 spike in subjective pain the following afternoon.",
+          "Digital Stress: Combining high erraticism metrics with pain reports indicates increased neurological strain."
+        ],
+        patient_questions_for_doctor: [
+          "My digital interventions spiked on Tuesday and Wednesday. Should we adjust my medication timing for the middle of the week?",
+          "Since poor sleep is directly causing my afternoon pain flare-ups, are there specific nighttime routines or aids we can explore?",
+          "Given my low movement on high-pain days, what are your top 2 recommendations to prevent stiffness while working?"
+        ]
+      };
+      setData(fallbackPayload);
+      addEntry({
+        type: 'snapshot',
+        data: fallbackPayload
+      });
+    }
+    setLoading(false);
+  };
+
+  const handleDownloadPDF = async () => {
+    // Dynamic import to avoid SSR issues if this was a Next.js app, but also good for bundle splitting
+    const html2pdf = (await import('html2pdf.js')).default;
+    const element = document.getElementById('doctor-snapshot-content');
+    
+    // Temporarily hide the close/download buttons during export if they were inside the snapshot block
+    const opt = {
+      margin:       0.5,
+      filename:     `Clinical_Snapshot_${data?.report_date || 'latest'}.pdf`,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2 },
+      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+    
+    html2pdf().set(opt).from(element).save();
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -31,7 +138,10 @@ const DoctorSnapshotModal = ({ isOpen, onClose }) => {
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <button className="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition-colors text-sm font-medium">
+            <button 
+              onClick={handleDownloadPDF}
+              className="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition-colors text-sm font-medium"
+            >
               <Download className="w-4 h-4" /> Export PDF
             </button>
             <button onClick={onClose} className="p-2 hover:bg-white/20 rounded-full transition-colors">
@@ -41,8 +151,15 @@ const DoctorSnapshotModal = ({ isOpen, onClose }) => {
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6 bg-gray-50 flex flex-col gap-6">
+        <div id="doctor-snapshot-content" className="flex-1 overflow-y-auto p-6 bg-gray-50 flex flex-col gap-6 relative">
           
+          {loading && (
+            <div className="absolute inset-0 z-10 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center space-y-4 rounded-b-2xl">
+              <Loader2 className="w-12 h-12 text-[#3835AC] animate-spin" />
+              <p className="text-lg font-bold text-gray-800 tracking-tight animate-pulse">NAT Agent synthesizing clinical data...</p>
+            </div>
+          )}
+
           {/* Patient Header Block */}
           <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex justify-between items-start">
             <div>
@@ -84,12 +201,33 @@ const DoctorSnapshotModal = ({ isOpen, onClose }) => {
                 </div>
               </div>
 
-              {/* Weekly Synthesis Summary */}
+              {/* Advanced Clinical Synthesis Summary */}
               <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-                <h4 className="font-bold text-gray-800 mb-3 border-b pb-2">Weekly Synthesis</h4>
-                <p className="text-gray-700 text-sm leading-relaxed">
-                  Patient exhibited a sharp increase in digital stress biomarkers (keystroke erraticism & flattened vocal cadence) peaking on Tuesday and Wednesday. The Aegis Protocol autonomously intervened <strong>7 times</strong> this week to prevent severe symptom crashes. Pain levels correlated strongly with high-stress days. Self-reported qualitative data highlights lower back stiffness and poor sleep quality preceding these flare-ups. Activity (wheelchair rolls) remains below the 85% goal on high-pain days.
-                </p>
+                <h4 className="font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-[#3835AC]" /> Clinical Assessment & Plan
+                </h4>
+                {data?.patient_status ? (
+                  <div className="space-y-4">
+                    <div>
+                      <h5 className="text-sm font-bold text-gray-600 uppercase tracking-wider mb-1">History of Present Illness</h5>
+                      <p className="text-gray-800 text-sm leading-relaxed">{data.patient_status.hpi}</p>
+                    </div>
+                    <div>
+                      <h5 className="text-sm font-bold text-gray-600 uppercase tracking-wider mb-1">Objective Findings</h5>
+                      <p className="text-gray-800 text-sm leading-relaxed bg-gray-50 p-2 rounded border border-gray-100">{data.patient_status.objective}</p>
+                    </div>
+                    <div>
+                      <h5 className="text-sm font-bold text-[#3835AC] uppercase tracking-wider mb-1">Assessment</h5>
+                      <p className="text-gray-800 text-sm leading-relaxed font-medium">{data.patient_status.assessment}</p>
+                    </div>
+                    <div>
+                      <h5 className="text-sm font-bold text-green-700 uppercase tracking-wider mb-1">Plan</h5>
+                      <p className="text-gray-800 text-sm leading-relaxed whitespace-pre-wrap">{data.patient_status.plan}</p>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-gray-500 text-sm italic">Summary data unavailable.</p>
+                )}
               </div>
             </div>
 
@@ -104,18 +242,12 @@ const DoctorSnapshotModal = ({ isOpen, onClose }) => {
                   <h4 className="font-bold text-gray-800">Top 3 Clinical Prevention Flags</h4>
                 </div>
                 <ul className="space-y-4">
-                  <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold text-sm">1</span>
-                    <p className="text-sm text-gray-700"><strong>High Intervention Rate:</strong> Patient required 7 digital interventions (Aegis Protocol) for fatigue/pain this week. Suspect physical strain or medication tolerance building mid-week.</p>
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-sm">2</span>
-                    <p className="text-sm text-gray-700"><strong>Sleep/Pain Cycle:</strong> Voice logs consistently link 4-hour sleep nights with a +3 spike in subjective pain the following afternoon.</p>
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center font-bold text-sm">3</span>
-                    <p className="text-sm text-gray-700"><strong>Risk of Pressure Sore:</strong> Combining low wheelchair mobilization metrics with high seated pain reports indicates increased risk.</p>
-                  </li>
+                  {data?.prevention_flags.map((flag, index) => (
+                    <li key={index} className="flex gap-3">
+                      <span className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm ${index === 0 ? 'bg-red-100 text-red-600' : index === 1 ? 'bg-orange-100 text-orange-600' : 'bg-yellow-100 text-yellow-600'}`}>{index + 1}</span>
+                      <p className="text-sm text-gray-700 pt-0.5">{flag}</p>
+                    </li>
+                  ))}
                 </ul>
               </div>
 
@@ -128,15 +260,11 @@ const DoctorSnapshotModal = ({ isOpen, onClose }) => {
                 </div>
                 <p className="text-xs text-gray-500 mb-3 border-b pb-2">EmpowerLink suggests asking your doctor these questions based on this week's data:</p>
                 <div className="space-y-3">
-                  <div className="p-3 bg-cyan-50 rounded-lg text-sm font-medium text-cyan-900 border border-cyan-100">
-                    "My digital interventions spiked on Tuesday and Wednesday. Should we adjust my medication timing for the middle of the week?"
-                  </div>
-                  <div className="p-3 bg-cyan-50 rounded-lg text-sm font-medium text-cyan-900 border border-cyan-100">
-                    "Since poor sleep is directly causing my afternoon pain flare-ups, are there specific nighttime routines or aids we can explore?"
-                  </div>
-                  <div className="p-3 bg-cyan-50 rounded-lg text-sm font-medium text-cyan-900 border border-cyan-100">
-                    "Given my low movement on high-pain days, what are your top 2 recommendations to prevent pressure sores while working?"
-                  </div>
+                  {data?.patient_questions_for_doctor.map((q, index) => (
+                    <div key={index} className="p-3 bg-cyan-50 rounded-lg text-sm font-medium text-cyan-900 border border-cyan-100">
+                      "{q}"
+                    </div>
+                  ))}
                 </div>
               </div>
 
