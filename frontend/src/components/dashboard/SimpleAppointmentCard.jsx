@@ -1,5 +1,16 @@
 /* eslint-disable no-unused-vars */
-const SimpleAppointmentCard = ({ title, time, icon: Icon, color = "bg-indigo-600" }) => {
+import { Activity, Stethoscope, FileText, Video } from 'lucide-react';
+
+const iconMap = {
+  checkup: Activity,
+  specialist: Stethoscope,
+  review: FileText,
+  telehealth: Video,
+};
+
+const SimpleAppointmentCard = ({ title, time, type, color = "bg-indigo-600" }) => {
+  const Icon = iconMap[type] || Activity;
+
   return (
 <div className="bg-[#dde2f9] rounded-3xl p-4 shadow-sm border border-[#dde2f9] inline-flex items-center justify-between gap-4 transition-transform hover:scale-105 healthcare-card w-fit">
       <div>

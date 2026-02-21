@@ -11,7 +11,7 @@ const Header = () => {
       placeholder="Search"
       className="w-full pl-10 pr-10 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400"
     />
-    <div className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-[#3835AC] rounded-full p-1.5 cursor-pointer">
+    <div className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-cyan-400 rounded-full p-1.5 cursor-pointer">
       <Bell className="w-4 h-4 text-white" />
     </div>
   </div>

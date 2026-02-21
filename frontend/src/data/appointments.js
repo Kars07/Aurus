@@ -1,5 +1,3 @@
-import { Stethoscope, Activity, FileText, Video } from 'lucide-react'
-
 export const upcomingAppointments = [
   {
     id: 1,
@@ -7,7 +5,6 @@ export const upcomingAppointments = [
     time: '11:00 AM',
     day: 'Thursday',
     type: 'checkup',
-    icon: Activity,
     color: 'bg-cyan-500'
   },
   {
@@ -15,8 +12,7 @@ export const upcomingAppointments = [
     title: 'Auris Data Review',
     time: '14:00 PM',
     day: 'Thursday',
-    type: 'specialist',
-    icon: FileText,
+    type: 'review',
     color: 'bg-[#3835AC]'
   },
   {
@@ -24,8 +20,7 @@ export const upcomingAppointments = [
     title: 'Telehealth PT Session',
     time: '12:00 PM',
     day: 'Saturday',
-    type: 'specialist',
-    icon: Video,
+    type: 'telehealth',
     color: 'bg-purple-500'
   },
   {
@@ -34,7 +29,6 @@ export const upcomingAppointments = [
     time: '16:00 PM',
     day: 'Saturday',
     type: 'specialist',
-    icon: Stethoscope,
     color: 'bg-amber-500'
   }
 ]

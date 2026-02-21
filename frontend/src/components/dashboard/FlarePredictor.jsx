@@ -83,7 +83,7 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
       {/* Decorative Background Blob */}
       <div className={`absolute -right-10 -top-10 w-40 h-40 rounded-full blur-3xl opacity-20 ${bgColor}`} />
 
-      <div className="flex justify-between items-start mb-6">
+      <div className="flex  justify-between items-start mb-6">
         <div>
           <h3 className="text-xl font-bold font-display text-slate-800 mb-1">Predictive Radar</h3>
           <p className="text-sm text-slate-500">{isHighRisk ? 'High warning detected' : 'System nominal'}</p>

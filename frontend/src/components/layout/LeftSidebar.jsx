@@ -5,7 +5,6 @@ import {
   MessageCircleMore,
   Settings,
   LayoutDashboard,
-  HistoryIcon,
   Phone,
   Bot
 } from "lucide-react";
@@ -18,10 +17,9 @@ const LeftSidebar = () => {
 
   const navItemsGeneral = [
     { icon: LayoutDashboard, label: "Dashboard", path: "/" },
-    { icon: HistoryIcon, label: "History" },
-    { icon: CalendarRange, label: "Calendar" },
-    { icon: SquarePlus, label: "Appointments" },
-    { icon: ChartNoAxesCombined, label: "Statistics" },
+    { icon: CalendarRange, label: "Calendar", path: "/" },
+    { icon: SquarePlus, label: "Appointments", path: "/appointments" },
+    { icon: ChartNoAxesCombined, label: "Statistics", path: "/statistics" },
   ];
 
   const navItemsTools = [

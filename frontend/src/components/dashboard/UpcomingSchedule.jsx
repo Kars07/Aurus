@@ -1,9 +1,11 @@
 import SimpleAppointmentCard from './SimpleAppointmentCard'
-import { upcomingAppointments } from '../../data/appointments'
+import { useAppointments } from '../../context/AppointmentsContext'
 
 const UpcomingSchedule = () => {
+  const { appointments } = useAppointments();
+
   // Group appointments by day
-  const groupedAppointments = upcomingAppointments.reduce((acc, appointment) => {
+  const groupedAppointments = appointments.reduce((acc, appointment) => {
     if (!acc[appointment.day]) {
       acc[appointment.day] = []
     }
@@ -19,13 +21,13 @@ const UpcomingSchedule = () => {
         {Object.entries(groupedAppointments).map(([day, appointments]) => (
           <div key={day}>
             <p className="text-lg font-medium text-gray-600 mb-3">On {day}</p>
-<div className="grid grid-flow-row auto-cols-max grid-cols-2 gap-6 w-fit">
+<div className="flex flex-col gap-4">
               {appointments.map((appointment) => (
                 <SimpleAppointmentCard 
                   key={appointment.id}
                   title={appointment.title}
                   time={appointment.time}
-                  icon={appointment.icon}
+                  type={appointment.type}
                   color={appointment.color}
                 />
               ))}
