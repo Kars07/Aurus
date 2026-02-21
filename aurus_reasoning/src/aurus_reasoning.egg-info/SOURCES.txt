@@ -1,0 +1,10 @@
+pyproject.toml
+src/aurus_reasoning/__init__.py
+src/aurus_reasoning/aurus_reasoning.py
+src/aurus_reasoning/register.py
+src/aurus_reasoning.egg-info/PKG-INFO
+src/aurus_reasoning.egg-info/SOURCES.txt
+src/aurus_reasoning.egg-info/dependency_links.txt
+src/aurus_reasoning.egg-info/entry_points.txt
+src/aurus_reasoning.egg-info/requires.txt
+src/aurus_reasoning.egg-info/top_level.txt

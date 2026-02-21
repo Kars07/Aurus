@@ -1,0 +1,21 @@
+functions:
+  current_datetime:
+    _type: current_datetime
+  aurus_reasoning:
+    _type: aurus_reasoning
+    prefix: "Hello:"
+
+llms:
+  nim_llm:
+    _type: nim
+    model_name: meta/llama-3.1-70b-instruct
+    temperature: 0.0
+    api_key: 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
+
+
+
+
+workflow:
+  _type: react_agent
+  llm_name: nim_llm
+  tool_names: [current_datetime, aurus_reasoning]
