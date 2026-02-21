@@ -10,6 +10,7 @@ llms:
     _type: nim
     model_name: meta/llama-3.1-70b-instruct
     temperature: 0.0
+    max_tokens: 2048
     api_key: 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
 
 
@@ -18,4 +19,5 @@ llms:
 workflow:
   _type: react_agent
   llm_name: nim_llm
-  tool_names: [current_datetime, aurus_reasoning]
+  tool_names: [aurus_reasoning]
+  additional_instructions: "As the EmpowerLink reasoning engine, you MUST use the aurus_reasoning tool to evaluate patient data. After receiving the Observation from the tool, if the Observation contains a raw JSON object, you must output exactly that JSON. If the Observation commands you to generate a JSON object, follow its instructions and generate it dynamically. End your response by outputting 'Thought: I now know the final answer' followed exactly by 'Final Answer: ' and then the raw JSON object. Do NOT add any extra conversational text, markdown, or markdown code blocks (like ```json), because the frontend must parse the Final Answer as strict JSON."

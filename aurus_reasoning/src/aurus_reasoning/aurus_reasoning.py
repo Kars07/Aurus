@@ -31,22 +31,20 @@ async def aurus_reasoning_function(config: AurusReasoningFunctionConfig, builder
         mode: str,
         vocal_stress: int = 0,
         keystroke_erraticism: int = 0,
-        wheelchair_rolls: int = 0,
         transcript: str = ""
     ) -> str:
         """
-        Analyzes patient telemetry and transcripts to trigger interventions or generate summaries.
+        Analyzes patient telemetry, transcripts, and history to trigger interventions or generate summaries.
         The ReAct agent will call this function to determine the correct JSON payload.
 
         Args:
             mode (str): The analysis mode: "realtime" (for Aegis triggers), "daily" (for patient nudges), or "clinical" (for doctor snapshots).
             vocal_stress (int): Current vocal stress score (0-100).
             keystroke_erraticism (int): Current typing erraticism score (0-100).
-            wheelchair_rolls (int): Number of wheelchair rolls today.
-            transcript (str): The patient's voice journal transcript.
+            transcript (str): The patient's current voice/text journal transcript.
 
         Returns:
-            str: A JSON formatted string containing the necessary intervention or summary payload to be sent to the frontend.
+            str: Command sequence for the ReAct LLM or an immediate JSON payload.
         """
         
         # Phase 1: Passive Background Intervention (Aegis Protocol)
@@ -74,34 +72,46 @@ async def aurus_reasoning_function(config: AurusReasoningFunctionConfig, builder
 
         # Phase 2: Active Daily Check-In (Patient UI)
         elif mode == "daily":
-            # Determine risk based on accessibility metrics
-            is_at_risk = wheelchair_rolls < 500
-            
-            payload = {
-                "status": "warning_flagged" if is_at_risk else "nominal",
-                "patient_facing_nudge": f"I noticed your activity is at {wheelchair_rolls} rolls today, and you mentioned: '{transcript}'. This increases pressure sore risk. Let's do 3 gentle seated torso twists right now.",
-                "tts_audio_ready": True,
-                "suggested_action": "seated_stretches"
-            }
-            return json.dumps(payload)
+            # Command the LLM to generate a personalized nudge based on the actual transcript
+            observation = (
+                "Action Required from LLM: Dynamically generate an empathetic prevention nudge JSON for a patient using the EmpowerLink system. "
+                f"The patient's current transcript is: '{transcript}'. "
+                f"Their current vocal stress is {vocal_stress} and keystroke erraticism is {keystroke_erraticism}. "
+                "Do not output conversational text. Generate a highly realistic JSON object matching this exact schema:\n"
+                "{\n"
+                "  \"status\": \"warning_flagged\" or \"nominal\",\n"
+                "  \"patient_facing_nudge\": \"A direct, highly empathetic 2-sentence response directly addressing their transcript. Provide a highly tailored actionable suggestion based on their specific complaint (e.g., eye strain -> 20-20-20 rule, cramps -> magnesium/stretch, back pain -> posture check).\",\n"
+                "  \"tts_audio_ready\": true,\n"
+                "  \"suggested_action\": \"Short string ID of the suggested action (e.g., 'eye_stretch')\"\n"
+                "}\n"
+                "Output ONLY the raw JSON object."
+            )
+            return observation
 
         # Phase 3: Clinical Translation (Doctor UI)
         elif mode == "clinical":
-            # For the hackathon, we output the strict mock FHIR JSON here.
-            # The ReAct agent realizes it needs a doctor summary and triggers this mode.
-            payload = {
-                "report_date": "2026-02-21",
-                "clinical_summary": "Patient exhibits a 4-day trend of decreasing mobility correlating with reported joint stiffness and high erraticism scores.",
-                "prevention_flags": [
-                    "High risk of pressure sores due to immobility.",
-                    "Potential medication tolerance building for evening pain management."
-                ],
-                "patient_questions_for_doctor": [
-                    "Should we adjust my evening pain medication before this flare-up gets worse?",
-                    "Are there specific seated physical therapy exercises I should add to my routine?"
-                ]
-            }
-            return json.dumps(payload)
+            # Command the LLM to generate a highly advanced clinical summary dynamically using recent history
+            observation = (
+                "Action Required from LLM: Dynamically generate an advanced, medical-grade clinical summary JSON for a patient using the EmpowerLink system. "
+                "Analyze the recent journal history and vitals logs provided in your system prompt to build the clinical case.\n"
+                f"Current vocal stress is {vocal_stress} and keystroke erraticism is {keystroke_erraticism}. "
+                "Adopt the persona of a Chief Medical Officer. Use advanced medical terminology. "
+                "Ensure your assessment accurately reflects the specific complaints in the history logs (e.g., eye strain, cramps, etc). "
+                "Do not output conversational text. Generate a highly realistic JSON object matching this exact schema:\n"
+                "{\n"
+                "  \"report_date\": \"YYYY-MM-DD\",\n"
+                "  \"patient_status\": {\n"
+                "    \"hpi\": \"History of Present Illness - detailed paragraph synthesizing the recent logs\",\n"
+                "    \"objective\": \"Objective telemetry findings (mention erraticism & stress metrics)\",\n"
+                "    \"assessment\": \"Clinical assessment and highly specific, relevant suspected ICD-10 codes based directly on their complaints\",\n"
+                "    \"plan\": \"Proposed treatment plan and immediate next steps\"\n"
+                "  },\n"
+                "  \"prevention_flags\": [\"Flag 1 focusing on specific reported issue\", \"Flag 2 focusing on secondary risk\"],\n"
+                "  \"patient_questions_for_doctor\": [\"Relevant question 1\", \"Relevant question 2\"]\n"
+                "}\n"
+                "Output ONLY the raw JSON object."
+            )
+            return observation
 
         # Error Handling
         return json.dumps({"error": f"Invalid mode '{mode}' specified. Must be realtime, daily, or clinical."})

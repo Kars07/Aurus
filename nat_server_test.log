@@ -1,0 +1,171 @@
+nohup: ignoring input
+2026-02-21 18:57:16 - INFO     - nat.cli.commands.start:192 - Starting NAT from config file: 'aurus_reasoning/src/aurus_reasoning/configs/config.yml'
+2026-02-21 18:57:16 - WARNING  - nat.front_ends.fastapi.fastapi_front_end_plugin:139 - Dask is not installed, async execution and evaluation will not be available.
+2026-02-21 18:57:16 - WARNING:  Current configuration will not reload as not all conditions are met, please refer to documentation.
+2026-02-21 18:57:16 - INFO:     Started server process [64292]
+2026-02-21 18:57:16 - INFO:     Waiting for application startup.
+/home/nagini/aurus/.venv/lib/python3.12/site-packages/langchain_nvidia_ai_endpoints/_common.py:243: UserWarning: Found nvidia/llama-nemotron-embed-vl-1b-v2 in available_models, but type is unknown and inference may fail.
+  warnings.warn(
+2026-02-21 18:57:17 - INFO     - nat.front_ends.fastapi.fastapi_front_end_plugin_worker:252 - No evaluators configured, skipping evaluator initialization
+2026-02-21 18:57:17 - INFO     - nat.runtime.session:298 - Shared workflow built (entry_function=None)
+2026-02-21 18:57:17 - INFO     - nat.front_ends.fastapi.fastapi_front_end_plugin_worker:739 - Expecting generate request payloads in the following format: {'messages': FieldInfo(annotation=Union[list[Message], NoneType], required=False, default=None, description='A non-empty conversation of messages to process.', metadata=[typing.Annotated[list[nat.data_models.api_server.Message], Len(min_length=1, max_length=None)]]), 'input_message': FieldInfo(annotation=Union[str, NoneType], required=False, default=None, description='A single input message to process. Useful for functions that do not require a conversation')}
+2026-02-21 18:57:17 - WARNING  - nat.front_ends.fastapi.fastapi_front_end_plugin_worker:1095 - Dask is not available, async generation endpoints will not be added.
+2026-02-21 18:57:17 - INFO     - nat.runtime.session:298 - Shared workflow built (entry_function=None)
+2026-02-21 18:57:17 - WARNING  - nat.front_ends.fastapi.fastapi_front_end_plugin_worker:538 - Dask is not available, evaluation endpoints will not be added.
+2026-02-21 18:57:17 - INFO     - nat.runtime.session:298 - Shared workflow built (entry_function=None)
+2026-02-21 18:57:17 - INFO     - nat.front_ends.fastapi.fastapi_front_end_plugin_worker:601 - Added evaluate_item route at /evaluate/item
+2026-02-21 18:57:17 - INFO     - nat.front_ends.fastapi.fastapi_front_end_plugin_worker:1559 - Added health check endpoint at /health
+2026-02-21 18:57:17 - INFO:     Application startup complete.
+2026-02-21 18:57:17 - INFO:     Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
+2026-02-21 18:57:52 - ERROR    - nat.agent.react_agent.agent:246 - [AGENT] Failed to call agent_node: [###] Unknown Error
+age not found
+
+2026-02-21 18:57:52 - ERROR    - nat.agent.react_agent.register:165 - [AGENT] ReAct Agent failed with exception: [###] Unknown Error
+age not found
+
+2026-02-21 18:57:52 - ERROR    - nat.builder.function:206 - Error with ainvoke in function with input: messages=[Message(content='Analyze the patient\'s daily journal log. You must call the \'aurus_reasoning\' tool with these exact parameters:\\n- mode: "daily"\\n- vocal_stress: 85\\n- keystroke_erraticism: 90\\n- wheelchair_rolls: 400\\n- transcript: "My lower back is killing me and I only got 4 hours of sleep."', role=<UserMessageContentRoleType.SYSTEM: 'system'>)] model=None frequency_penalty=0.0 logit_bias=None logprobs=None top_logprobs=None max_tokens=None n=1 presence_penalty=0.0 response_format=None seed=None service_tier=None stream=False stream_options=None temperature=1.0 top_p=None tools=None tool_choice=None parallel_tool_calls=True user=None. Error: [###] Unknown Error
+age not found
+
+2026-02-21 18:57:52 - ERROR    - nat.runtime.runner:231 - Error running workflow: [###] Unknown Error
+age not found
+
+2026-02-21 18:57:52 - INFO:     127.0.0.1:52436 - "POST /v1/chat/completions HTTP/1.1" 500 Internal Server Error
+2026-02-21 18:57:52 - ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/uvicorn/protocols/http/httptools_impl.py", line 416, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/fastapi/applications.py", line 1134, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 191, in __call__
+    with recv_stream, send_stream, collapse_excgroups():
+  File "/usr/lib/python3.12/contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/starlette/_utils.py", line 87, in collapse_excgroups
+    raise exc
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/nat/front_ends/fastapi/fastapi_front_end_plugin_worker.py", line 164, in authentication_log_filter
+    return await self._suppress_authentication_logs(request, call_next)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/nat/front_ends/fastapi/fastapi_front_end_plugin_worker.py", line 214, in _suppress_authentication_logs
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/starlette/middleware/base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/starlette/middleware/cors.py", line 87, in __call__
+    await self.app(scope, receive, send)
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 119, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 105, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 424, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 312, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/nat/front_ends/fastapi/fastapi_front_end_plugin_worker.py", line 887, in post_openai_api_compatible
+    result = await generate_single_response(payload, session, result_type=ChatResponse)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/nat/front_ends/fastapi/response_helpers.py", line 118, in generate_single_response
+    return await runner.result(to_type=result_type)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/nat/runtime/runner.py", line 207, in result
+    result = await self._entry_fn.ainvoke(self._input_message, to_type=to_type)  # type: ignore
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/nat/builder/function.py", line 197, in ainvoke
+    result = await invoke_callable(converted_input)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/nat/builder/function.py", line 375, in _ainvoke
+    return await self._ainvoke_fn(value)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/nat/agent/react_agent/register.py", line 145, in _response_fn
+    state = await graph.ainvoke(state, config={'recursion_limit': (config.max_tool_calls + 1) * 2})
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/langgraph/pregel/main.py", line 3161, in ainvoke
+    async for chunk in self.astream(
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/langgraph/pregel/main.py", line 2974, in astream
+    async for _ in runner.atick(
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/langgraph/pregel/_runner.py", line 304, in atick
+    await arun_with_retry(
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/langgraph/pregel/_retry.py", line 138, in arun_with_retry
+    return await task.proc.ainvoke(task.input, config)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/langgraph/_internal/_runnable.py", line 705, in ainvoke
+    input = await asyncio.create_task(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/futures.py", line 287, in __await__
+    yield self  # This tells Task to wait for completion.
+    ^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 385, in __wakeup
+    future.result()
+  File "/usr/lib/python3.12/asyncio/futures.py", line 203, in result
+    raise self._exception.with_traceback(self._exception_tb)
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 314, in __step_run_and_handle_result
+    result = coro.send(None)
+             ^^^^^^^^^^^^^^^
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/langgraph/_internal/_runnable.py", line 473, in ainvoke
+    ret = await self.afunc(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/nat/agent/react_agent/agent.py", line 161, in agent_node
+    output_message = await self._stream_llm(
+                     ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/nat/agent/base.py", line 106, in _stream_llm
+    async for event in runnable.astream(inputs, config=config):
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/langchain_core/runnables/base.py", line 3561, in astream
+    async for chunk in self.atransform(input_aiter(), config, **kwargs):
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/langchain_core/runnables/base.py", line 3543, in atransform
+    async for chunk in self._atransform_stream_with_config(
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/langchain_core/runnables/base.py", line 2430, in _atransform_stream_with_config
+    chunk = await coro_with_context(anext(iterator), context)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/futures.py", line 287, in __await__
+    yield self  # This tells Task to wait for completion.
+    ^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 385, in __wakeup
+    future.result()
+  File "/usr/lib/python3.12/asyncio/futures.py", line 203, in result
+    raise self._exception.with_traceback(self._exception_tb)
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 314, in __step_run_and_handle_result
+    result = coro.send(None)
+             ^^^^^^^^^^^^^^^
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/langchain_core/runnables/base.py", line 3510, in _atransform
+    async for output in final_pipeline:
+  File "/home/nagini/aurus/.venv/lib/python3.12/site-packages/langchain_core/runnables/base.py", line 5924, in atransform
+    async for item in self.bound.atransform(
+Exception: [###] Unknown Error
+age not found
+
+During task with name 'agent' and id '986196b4-4892-5e06-589d-e52e96449800'

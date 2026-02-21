@@ -1,0 +1,18 @@
+nohup: ignoring input
+2026-02-21 18:59:04 - INFO     - nat.cli.commands.start:192 - Starting NAT from config file: 'aurus_reasoning/src/aurus_reasoning/configs/config.yml'
+2026-02-21 18:59:04 - WARNING  - nat.front_ends.fastapi.fastapi_front_end_plugin:139 - Dask is not installed, async execution and evaluation will not be available.
+2026-02-21 18:59:04 - WARNING:  Current configuration will not reload as not all conditions are met, please refer to documentation.
+2026-02-21 18:59:04 - INFO:     Started server process [65181]
+2026-02-21 18:59:04 - INFO:     Waiting for application startup.
+2026-02-21 18:59:04 - INFO     - nat.front_ends.fastapi.fastapi_front_end_plugin_worker:252 - No evaluators configured, skipping evaluator initialization
+2026-02-21 18:59:04 - INFO     - nat.runtime.session:298 - Shared workflow built (entry_function=None)
+2026-02-21 18:59:04 - INFO     - nat.front_ends.fastapi.fastapi_front_end_plugin_worker:739 - Expecting generate request payloads in the following format: {'messages': FieldInfo(annotation=Union[list[Message], NoneType], required=False, default=None, description='A non-empty conversation of messages to process.', metadata=[typing.Annotated[list[nat.data_models.api_server.Message], Len(min_length=1, max_length=None)]]), 'input_message': FieldInfo(annotation=Union[str, NoneType], required=False, default=None, description='A single input message to process. Useful for functions that do not require a conversation')}
+2026-02-21 18:59:04 - WARNING  - nat.front_ends.fastapi.fastapi_front_end_plugin_worker:1095 - Dask is not available, async generation endpoints will not be added.
+2026-02-21 18:59:04 - INFO     - nat.runtime.session:298 - Shared workflow built (entry_function=None)
+2026-02-21 18:59:04 - WARNING  - nat.front_ends.fastapi.fastapi_front_end_plugin_worker:538 - Dask is not available, evaluation endpoints will not be added.
+2026-02-21 18:59:04 - INFO     - nat.runtime.session:298 - Shared workflow built (entry_function=None)
+2026-02-21 18:59:04 - INFO     - nat.front_ends.fastapi.fastapi_front_end_plugin_worker:601 - Added evaluate_item route at /evaluate/item
+2026-02-21 18:59:04 - INFO     - nat.front_ends.fastapi.fastapi_front_end_plugin_worker:1559 - Added health check endpoint at /health
+2026-02-21 18:59:04 - INFO:     Application startup complete.
+2026-02-21 18:59:04 - INFO:     Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
+2026-02-21 19:00:02 - INFO:     127.0.0.1:52514 - "POST /v1/chat/completions HTTP/1.1" 200 OK
