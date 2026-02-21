@@ -38,10 +38,10 @@ async def aurus_reasoning_function(config: AurusReasoningFunctionConfig, builder
         The ReAct agent will call this function to determine the correct JSON payload.
 
         Args:
-            mode (str): The analysis mode: "realtime" (for Aegis triggers), "daily" (for patient nudges), or "clinical" (for doctor snapshots).
+            mode (str): The analysis mode: "realtime", "daily", "clinical", "flare_predict", "advocate", or "investigate".
             vocal_stress (int): Current vocal stress score (0-100).
             keystroke_erraticism (int): Current typing erraticism score (0-100).
-            transcript (str): The patient's current voice/text journal transcript.
+            transcript (str): The patient's query for investigate mode, or current voice/text journal transcript.
 
         Returns:
             str: Command sequence for the ReAct LLM or an immediate JSON payload.
@@ -113,8 +113,58 @@ async def aurus_reasoning_function(config: AurusReasoningFunctionConfig, builder
             )
             return observation
 
+        # Phase 4: Predict upcoming symptom flares (B2C)
+        elif mode == "flare_predict":
+            observation = (
+                "Action Required from LLM: Analyze the patient's recent journal history provided in the system prompt. "
+                f"Current vocal stress is {vocal_stress} and keystroke erraticism is {keystroke_erraticism}. "
+                "Based solely on the history's cadence of pain/symptoms, predict the likelihood of an upcoming severe symptom flare-up within the next 24 hours. "
+                "Generate a JSON object matching this exact schema:\n"
+                "{\n"
+                "  \"flare_risk_percentage\": <integer between 0 and 100>,\n"
+                "  \"predicted_symptom\": \"Short string of the likely symptom (e.g., 'Migraine', 'Joint Stiffness')\",\n"
+                "  \"reasoning\": \"A concise 1-sentence explanation of why the data predicts this (e.g., 'Poor sleep and high erraticism historically precede your migraines.')\",\n"
+                "  \"preventative_action\": \"A highly actionable step to take right now to stop the flare.\"\n"
+                "}\n"
+                "Output ONLY the raw JSON object."
+            )
+            return observation
+
+        # Phase 5: Investigate patient question against history (B2C)
+        elif mode == "investigate":
+            observation = (
+                "Action Required from LLM: The patient has asked a question about their health history: "
+                f"'{transcript}'. "
+                "Analyze the patient's recent journal history provided in the system prompt to find the answer. "
+                "Act as a hyper-intelligent 'Health Detective'. Correlate their symptoms with their past behaviors or telemetry patterns. "
+                "Generate a JSON object matching this exact schema:\n"
+                "{\n"
+                "  \"answer\": \"A conversational, direct answer to the patient's question citing specific dates/events from their history log.\",\n"
+                "  \"confidence\": \"High, Medium, or Low\",\n"
+                "  \"detected_pattern\": \"A short title of the behavior pattern discovered.\"\n"
+                "}\n"
+                "Output ONLY the raw JSON object."
+            )
+            return observation
+
+        # Phase 6: Patient-Side Gaslighting Advocate (B2C)
+        elif mode == "advocate":
+            observation = (
+                "Action Required from LLM: The patient is preparing to see a potentially skeptical doctor. "
+                "Analyze their recent journal history provided in the system prompt. "
+                "Generate an unarguable, aggressive, clinical-grade medical brief designed to combat medical gaslighting. "
+                "Generate a JSON object matching this exact schema:\n"
+                "{\n"
+                "  \"advocate_brief\": \"A 3-paragraph defensive brief summarizing the patient's continuous suffering over the log period, using irrefutable telemetry data metrics to prove it isn't 'just anxiety'.\",\n"
+                "  \"demanded_tests\": [\"Specific bloodwork, imaging, or specialist referral to demand\"],\n"
+                "  \"script\": \"Exact quotes the patient should read aloud to the doctor if dismissed.\"\n"
+                "}\n"
+                "Output ONLY the raw JSON object."
+            )
+            return observation
+
         # Error Handling
-        return json.dumps({"error": f"Invalid mode '{mode}' specified. Must be realtime, daily, or clinical."})
+        return json.dumps({"error": f"Invalid mode '{mode}' specified."})
 
     # The docstring of analyze_patient_data is passed to the LLM so it knows exactly how to format its tool call.
     yield FunctionInfo.from_fn(analyze_patient_data, description=analyze_patient_data.__doc__)

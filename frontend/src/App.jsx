@@ -1,34 +1,32 @@
 import Header from './components/layout/Header'
-import LeftSidebar from './components/layout/LeftSidebar'
+import Sidebar from './components/layout/LeftSidebar'
 import RightSidebar from './components/layout/RightSidebar'
 import DashboardMainContent from './components/layout/DashboardMainContent'
 import AegisOverlay from './components/dashboard/AegisOverlay'
 import './App.css'
 import { HistoryProvider } from './context/HistoryContext';
-import Sidebar from './components/layout/LeftSidebar'; // Assuming LeftSidebar is renamed or replaced by Sidebar
 
 const App = () => {
   return (
     <HistoryProvider>
-      <div className="flex h-screen w-screen overflow-hidden">
+      <div className="flex h-screen w-screen overflow-hidden bg-[#0B0F19] text-slate-200">
         <AegisOverlay />
-        {/* Left Sidebar with scrolling */}
-        <div className="overflow-auto scrollbar-hide">
+        
+        {/* Left Sidebar (fixed width) */}
+        <div className="w-64 flex-shrink-0 overflow-y-auto scrollbar-hide border-r border-slate-800 hidden md:block">
           <Sidebar />
         </div>
 
-        {/* Main content area with header and dashboard - 50% */}
-        <div className="flex flex-col flex-1 overflow-hidden">
+        {/* Main Content Area (flexes to fill remaining space) */}
+        <div className="flex flex-col flex-1 min-w-0 overflow-hidden relative">
           <Header />
-          
-          {/* Dashboard main content with scrolling */}
-          <div className="flex-1 overflow-auto scrollbar-hide">
+          <div className="flex-1 overflow-y-auto scrollbar-hide">
             <DashboardMainContent />
           </div>
         </div>
 
-        {/* Right sidebar - 50% width, full height covering header area */}
-        <div className="flex-1 min-w-0 overflow-auto scrollbar-hide border-l border-gray-200">
+        {/* Right Sidebar (fixed width) */}
+        <div className="w-80 lg:w-96 flex-shrink-0 overflow-y-auto scrollbar-hide border-l border-slate-800 hidden xl:block shadow-2xl">
           <RightSidebar />
         </div>
       </div>
@@ -36,4 +34,4 @@ const App = () => {
   );
 }
 
-export default App
+export default App;
