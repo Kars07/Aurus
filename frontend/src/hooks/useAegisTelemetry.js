@@ -53,7 +53,7 @@ export const useAegisTelemetry = () => {
     };
 
     wsRef.current.onerror = (err) => {
-      console.error('WebSocket Error:', err);
+      // Silent error for hackathon demo so it doesn't spam the console
       wsRef.current.close();
     };
   }, []);
@@ -67,6 +67,35 @@ export const useAegisTelemetry = () => {
     };
   }, [connect]);
 
+  // Hackathon Mock Data Stream: keeping the UI alive when WS is down
+  useEffect(() => {
+    let mockInterval;
+    if (!isConnected) {
+      mockInterval = setInterval(() => {
+        setTelemetry(prev => {
+          if (prev.crash_imminent) return prev; // Freeze metrics during a crash
+          
+          // Random walk for erraticism: stays roughly between 0.10 and 0.45
+          const current = prev.keystroke_erraticism;
+          let change = (Math.random() - 0.5) * 0.15;
+          let next = current + change;
+          next = Math.max(0.12, Math.min(0.42, next));
+          
+          return {
+            ...prev,
+            keystroke_erraticism: next,
+            vocal_cadence: 0.9 + (Math.random() * 0.2),
+            timestamp: new Date().toISOString()
+          };
+        });
+      }, 2000); // update every 2 seconds
+    }
+    
+    return () => {
+      if (mockInterval) clearInterval(mockInterval);
+    };
+  }, [isConnected]);
+
   // For Hackathon demo: allow manual trigger
   const triggerManualCrash = async () => {
     try {
@@ -74,13 +103,13 @@ export const useAegisTelemetry = () => {
         method: 'POST'
       });
     } catch (e) {
-      console.error("Failed to trigger manual crash", e);
+      console.log("Using local mock trigger for hackathon...");
       // Fallback local trigger if backend is not running
       setTelemetry(prev => ({
         ...prev,
-        keystroke_erraticism: 0.9,
+        keystroke_erraticism: 0.92,
         vocal_cadence: 0.2,
-        overall_stress_index: 0.85,
+        overall_stress_index: 0.88,
         crash_imminent: true
       }));
       setInterventionsCount(c => c + 1);
@@ -89,12 +118,12 @@ export const useAegisTelemetry = () => {
       setTimeout(() => {
         setTelemetry(prev => ({
           ...prev,
-          keystroke_erraticism: 0.1,
+          keystroke_erraticism: 0.15,
           vocal_cadence: 1.0,
           overall_stress_index: 0.1,
           crash_imminent: false
         }));
-      }, 10000);
+      }, 15000);
     }
   };
 

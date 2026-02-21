@@ -6,8 +6,11 @@ import FlarePredictor from '../dashboard/FlarePredictor';
 import VagalToneWidget from '../dashboard/VagalToneWidget';
 import HealthDetective from '../dashboard/HealthDetective';
 import AnatomySection from '../dashboard/AnatomySection';
+import { useAegisTelemetry } from '../../hooks/useAegisTelemetry';
 
 const DashboardMainContent = () => {
+  const { triggerManualCrash } = useAegisTelemetry();
+
   return (
     <main className="flex-1 overflow-y-auto min-h-full bg-[#0B0F19] text-slate-200">
       <AegisOverlay />
@@ -19,9 +22,11 @@ const DashboardMainContent = () => {
             <h1 className="text-4xl font-black font-display text-white tracking-tight mb-2">My Health Command</h1>
             <p className="text-indigo-400 font-medium tracking-wide uppercase text-sm">EmpowerLink Continuous Telemetry Active</p>
           </div>
-          <button className="hidden md:block mt-4 md:mt-0 text-sm font-bold text-indigo-400 hover:text-indigo-300 transition-colors bg-indigo-500/10 px-4 py-2 rounded-xl">
-            Past 7 Days ▼
-          </button>
+          <div className="flex gap-3 mt-4 md:mt-0">
+            <button className="hidden md:block text-sm font-bold text-indigo-400 hover:text-indigo-300 transition-colors bg-indigo-500/10 px-4 py-2 rounded-xl">
+              Past 7 Days ▼
+            </button>
+          </div>
         </div>
 
         {/* B2C Wow Features: Top Row */}
