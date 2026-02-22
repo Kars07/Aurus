@@ -32,7 +32,7 @@ const LoginPage = () => {
     <div className="min-h-screen flex bg-[#F6FAFF]">
 
       {/* Left Brand Panel */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-[#3835AC] via-indigo-600 to-cyan-500 flex-col justify-between p-12 relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-[#06b6d4] via-cyan-600 to-cyan-500 flex-col justify-between p-12 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           {[...Array(6)].map((_, i) => (
             <div key={i} className="absolute rounded-full border border-white"
@@ -41,13 +41,13 @@ const LoginPage = () => {
         </div>
         <div className="relative z-10">
           <h1 className="text-4xl font-black text-white mb-2">Au<span className="text-cyan-300">ris.</span></h1>
-          <p className="text-indigo-200 text-sm font-medium">Your AI Health Companion</p>
+          <p className="text-cyan-200 text-sm font-medium">Your AI Health Companion</p>
         </div>
         <div className="relative z-10">
           <blockquote className="text-white text-2xl font-bold leading-snug mb-4">
             "Empowering patients.<br />Informing doctors.<br />Improving lives."
           </blockquote>
-          <p className="text-indigo-200 text-sm">Continuous health telemetry · AI clinical reports · Secure doctor messaging</p>
+          <p className="text-cyan-200 text-sm">Continuous health telemetry · AI clinical reports · Secure doctor messaging</p>
         </div>
         <div className="relative z-10 flex items-center gap-3">
           <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white/30">
@@ -55,7 +55,7 @@ const LoginPage = () => {
           </div>
           <div>
             <p className="text-white text-sm font-bold">Trusted by patients & clinicians</p>
-            <p className="text-indigo-200 text-xs">Backed by AI · HIPAA-aligned design</p>
+            <p className="text-cyan-200 text-xs">Backed by AI · HIPAA-aligned design</p>
           </div>
         </div>
       </div>
@@ -83,7 +83,7 @@ const LoginPage = () => {
                 required
                 value={form.email}
                 onChange={e => setForm({ ...form, email: e.target.value })}
-                className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#3835AC]/40 focus:border-[#3835AC] shadow-sm transition"
+                className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#06b6d4]/40 focus:border-[#06b6d4] shadow-sm transition"
                 placeholder="you@example.com"
               />
             </div>
@@ -96,7 +96,7 @@ const LoginPage = () => {
                   required
                   value={form.password}
                   onChange={e => setForm({ ...form, password: e.target.value })}
-                  className="w-full border border-slate-200 rounded-xl px-4 py-3 pr-11 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#3835AC]/40 focus:border-[#3835AC] shadow-sm transition"
+                  className="w-full border border-slate-200 rounded-xl px-4 py-3 pr-11 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#06b6d4]/40 focus:border-[#06b6d4] shadow-sm transition"
                   placeholder="••••••••"
                 />
                 <button type="button" onClick={() => setShowPass(!showPass)}
@@ -109,7 +109,7 @@ const LoginPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-[#3835AC] text-white font-bold rounded-xl hover:bg-indigo-800 transition shadow-sm disabled:opacity-60 text-sm"
+              className="w-full py-3 bg-[#06b6d4] text-white font-bold rounded-xl hover:bg-cyan-800 transition shadow-sm disabled:opacity-60 text-sm"
             >
               {loading ? 'Signing in…' : 'Sign In'}
             </button>
@@ -117,11 +117,11 @@ const LoginPage = () => {
 
           <p className="text-center text-sm text-slate-500 mt-6">
             Don't have an account?{' '}
-            <Link to="/signup" className="text-[#3835AC] font-bold hover:underline">Create one</Link>
+            <Link to="/signup" className="text-[#06b6d4] font-bold hover:underline">Create one</Link>
           </p>
 
           {/* Quick demo hint */}
-          <div className="mt-8 p-4 bg-indigo-50 rounded-2xl border border-indigo-100 text-xs text-indigo-600">
+          <div className="mt-8 p-4 bg-cyan-50 rounded-2xl border border-cyan-100 text-xs text-cyan-600">
             <p className="font-bold mb-1">Demo accounts (after signup):</p>
             <p>Patient: any email / doctor: include "dr" or "doctor" in email and select Doctor role</p>
           </div>

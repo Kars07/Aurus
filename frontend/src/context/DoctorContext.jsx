@@ -40,7 +40,7 @@ export const DoctorProvider = ({ children }) => {
                 : 'Recent',
               reportStatus: 'unread',
               riskLevel: 'See Report',
-              riskColor: 'bg-indigo-100 text-indigo-700',
+              riskColor: 'bg-cyan-100 text-cyan-700',
               report: {
                 hpi:        entry.data?.patient_status?.hpi        || entry.data?.hpi || '—',
                 assessment: entry.data?.prevention_flags           || [],

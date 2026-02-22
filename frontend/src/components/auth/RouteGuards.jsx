@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 
 const loading_spinner = (
   <div className="min-h-screen flex items-center justify-center bg-[#F6FAFF]">
-    <div className="w-10 h-10 border-4 border-[#3835AC] border-t-transparent rounded-full animate-spin" />
+    <div className="w-10 h-10 border-4 border-[#06b6d4] border-t-transparent rounded-full animate-spin" />
   </div>
 );
 

@@ -32,7 +32,7 @@ const SignupPage = () => {
     <div className="min-h-screen flex bg-[#F6FAFF]">
 
       {/* Left Brand Panel */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-[#3835AC] via-indigo-600 to-cyan-500 flex-col justify-between p-12 relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-[#06b6d4] via-cyan-600 to-cyan-500 flex-col justify-between p-12 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           {[...Array(6)].map((_, i) => (
             <div key={i} className="absolute rounded-full border border-white"
@@ -41,7 +41,7 @@ const SignupPage = () => {
         </div>
         <div className="relative z-10">
           <h1 className="text-4xl font-black text-white mb-2">Au<span className="text-cyan-300">ris.</span></h1>
-          <p className="text-indigo-200 text-sm font-medium">Your AI Health Companion</p>
+          <p className="text-cyan-200 text-sm font-medium">Your AI Health Companion</p>
         </div>
         <div className="relative z-10 space-y-3">
           {['AI-powered clinical reports', 'Real-time health telemetry', 'Secure doctor–patient messaging', 'Personalised disability support'].map(f => (
@@ -51,7 +51,7 @@ const SignupPage = () => {
             </div>
           ))}
         </div>
-        <p className="relative z-10 text-indigo-200 text-xs">By signing up you agree to Auris Terms of Service and Privacy Policy.</p>
+        <p className="relative z-10 text-cyan-200 text-xs">By signing up you agree to Auris Terms of Service and Privacy Policy.</p>
       </div>
 
       {/* Right Form Panel */}
@@ -81,12 +81,12 @@ const SignupPage = () => {
                 onClick={() => setForm({ ...form, role: value })}
                 className={`p-4 rounded-2xl border-2 text-left transition-all ${
                   form.role === value
-                    ? 'border-[#3835AC] bg-indigo-50'
-                    : 'border-slate-200 bg-white hover:border-indigo-200'
+                    ? 'border-[#06b6d4] bg-cyan-50'
+                    : 'border-slate-200 bg-white hover:border-cyan-200'
                 }`}
               >
-                <Icon className={`w-5 h-5 mb-2 ${form.role === value ? 'text-[#3835AC]' : 'text-slate-400'}`} />
-                <p className={`text-sm font-bold ${form.role === value ? 'text-[#3835AC]' : 'text-slate-700'}`}>{label}</p>
+                <Icon className={`w-5 h-5 mb-2 ${form.role === value ? 'text-[#06b6d4]' : 'text-slate-400'}`} />
+                <p className={`text-sm font-bold ${form.role === value ? 'text-[#06b6d4]' : 'text-slate-700'}`}>{label}</p>
                 <p className="text-xs text-slate-400 mt-0.5">{desc}</p>
               </button>
             ))}
@@ -99,7 +99,7 @@ const SignupPage = () => {
                 type="text" required
                 value={form.name}
                 onChange={e => setForm({ ...form, name: e.target.value })}
-                className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#3835AC]/40 focus:border-[#3835AC] shadow-sm"
+                className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#06b6d4]/40 focus:border-[#06b6d4] shadow-sm"
                 placeholder="Jane Smith"
               />
             </div>
@@ -109,7 +109,7 @@ const SignupPage = () => {
                 type="email" required
                 value={form.email}
                 onChange={e => setForm({ ...form, email: e.target.value })}
-                className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#3835AC]/40 focus:border-[#3835AC] shadow-sm"
+                className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#06b6d4]/40 focus:border-[#06b6d4] shadow-sm"
                 placeholder="you@example.com"
               />
             </div>
@@ -120,7 +120,7 @@ const SignupPage = () => {
                   type={showPass ? 'text' : 'password'} required
                   value={form.password}
                   onChange={e => setForm({ ...form, password: e.target.value })}
-                  className="w-full border border-slate-200 rounded-xl px-4 py-3 pr-11 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#3835AC]/40 focus:border-[#3835AC] shadow-sm"
+                  className="w-full border border-slate-200 rounded-xl px-4 py-3 pr-11 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#06b6d4]/40 focus:border-[#06b6d4] shadow-sm"
                   placeholder="Min. 6 characters"
                 />
                 <button type="button" onClick={() => setShowPass(!showPass)}
@@ -132,7 +132,7 @@ const SignupPage = () => {
 
             <button
               type="submit" disabled={loading}
-              className="w-full py-3 bg-[#3835AC] text-white font-bold rounded-xl hover:bg-indigo-800 transition shadow-sm disabled:opacity-60 text-sm mt-2"
+              className="w-full py-3 bg-[#06b6d4] text-white font-bold rounded-xl hover:bg-cyan-800 transition shadow-sm disabled:opacity-60 text-sm mt-2"
             >
               {loading ? 'Creating account…' : `Create ${form.role === 'doctor' ? 'Doctor' : 'Patient'} Account`}
             </button>
@@ -140,7 +140,7 @@ const SignupPage = () => {
 
           <p className="text-center text-sm text-slate-500 mt-6">
             Already have an account?{' '}
-            <Link to="/login" className="text-[#3835AC] font-bold hover:underline">Sign in</Link>
+            <Link to="/login" className="text-[#06b6d4] font-bold hover:underline">Sign in</Link>
           </p>
         </div>
       </div>

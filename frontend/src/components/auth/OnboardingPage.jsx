@@ -27,7 +27,7 @@ const SliderInput = ({ label, value, onChange, min = 1, max = 10, color }) => (
     </div>
     <input type="range" min={min} max={max} value={value}
       onChange={e => onChange(Number(e.target.value))}
-      className="w-full h-2 rounded-full appearance-none cursor-pointer accent-[#3835AC]"
+      className="w-full h-2 rounded-full appearance-none cursor-pointer accent-[#06b6d4]"
     />
     <div className="flex justify-between text-xs text-slate-400 mt-1">
       <span>{min === 1 ? 'Low' : min}</span>
@@ -40,8 +40,8 @@ const Chip = ({ label, selected, onClick }) => (
   <button type="button" onClick={onClick}
     className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
       selected
-        ? 'bg-[#3835AC] text-white border-[#3835AC] shadow-sm'
-        : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:text-[#3835AC]'
+        ? 'bg-[#06b6d4] text-white border-[#06b6d4] shadow-sm'
+        : 'bg-white text-slate-600 border-slate-200 hover:border-cyan-300 hover:text-[#06b6d4]'
     }`}>
     {label}
   </button>
@@ -107,7 +107,7 @@ const OnboardingPage = () => {
         <label className="block text-sm font-bold text-slate-700 mb-1.5">Age</label>
         <input type="number" min="1" max="120"
           value={data.age} onChange={e => setData({ ...data, age: e.target.value })}
-          className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#3835AC]/40 focus:border-[#3835AC]"
+          className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#06b6d4]/40 focus:border-[#06b6d4]"
           placeholder="e.g. 38" />
       </div>
       <div>
@@ -117,7 +117,7 @@ const OnboardingPage = () => {
             <button key={g} type="button"
               onClick={() => setData({ ...data, gender: g })}
               className={`px-4 py-2 rounded-xl text-sm font-semibold border transition-all ${
-                data.gender === g ? 'bg-[#3835AC] text-white border-[#3835AC]' : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-200'
+                data.gender === g ? 'bg-[#06b6d4] text-white border-[#06b6d4]' : 'bg-white text-slate-600 border-slate-200 hover:border-cyan-200'
               }`}>{g}</button>
           ))}
         </div>
@@ -130,13 +130,13 @@ const OnboardingPage = () => {
         <label className="block text-sm font-bold text-slate-700 mb-1.5">Primary Condition / Diagnosis</label>
         <input type="text"
           value={data.primaryCondition} onChange={e => setData({ ...data, primaryCondition: e.target.value })}
-          className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#3835AC]/40 focus:border-[#3835AC]"
+          className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#06b6d4]/40 focus:border-[#06b6d4]"
           placeholder="e.g. Rheumatoid Arthritis, MS, Spinal Cord Injury…" />
       </div>
       <div>
         <label className="block text-sm font-bold text-slate-700 mb-1.5">How long have you had this condition?</label>
         <select value={data.conditionDuration} onChange={e => setData({ ...data, conditionDuration: e.target.value })}
-          className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#3835AC]/40 focus:border-[#3835AC] bg-white">
+          className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#06b6d4]/40 focus:border-[#06b6d4] bg-white">
           <option value="">Select duration</option>
           {['Less than 6 months', '6–12 months', '1–3 years', '3–5 years', '5–10 years', '10+ years'].map(d => (
             <option key={d} value={d}>{d}</option>
@@ -168,7 +168,7 @@ const OnboardingPage = () => {
             <button key={v} type="button"
               onClick={() => setData({ ...data, sleepQuality: v })}
               className={`flex-1 py-2.5 rounded-xl text-sm font-semibold border transition-all ${
-                data.sleepQuality === v ? 'bg-[#3835AC] text-white border-[#3835AC]' : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-200'
+                data.sleepQuality === v ? 'bg-[#06b6d4] text-white border-[#06b6d4]' : 'bg-white text-slate-600 border-slate-200 hover:border-cyan-200'
               }`}>{l}</button>
           ))}
         </div>
@@ -183,14 +183,14 @@ const OnboardingPage = () => {
           <input type="text" value={data.medInput}
             onChange={e => setData({ ...data, medInput: e.target.value })}
             onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addMed(); } }}
-            className="flex-1 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#3835AC]/40 focus:border-[#3835AC]"
+            className="flex-1 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#06b6d4]/40 focus:border-[#06b6d4]"
             placeholder="Type medication name + Enter" />
           <button type="button" onClick={addMed}
-            className="px-4 py-2.5 bg-[#3835AC] text-white rounded-xl text-sm font-bold hover:bg-indigo-800">Add</button>
+            className="px-4 py-2.5 bg-[#06b6d4] text-white rounded-xl text-sm font-bold hover:bg-cyan-800">Add</button>
         </div>
         <div className="flex flex-wrap gap-2 mt-2">
           {data.currentMedications.map(m => (
-            <span key={m} className="flex items-center gap-1 bg-indigo-50 text-[#3835AC] text-xs font-semibold px-3 py-1 rounded-full border border-indigo-200">
+            <span key={m} className="flex items-center gap-1 bg-cyan-50 text-[#06b6d4] text-xs font-semibold px-3 py-1 rounded-full border border-cyan-200">
               {m}
               <button type="button" onClick={() => removeMed(m)} className="hover:text-red-500 ml-1 font-black">×</button>
             </span>
@@ -213,14 +213,14 @@ const OnboardingPage = () => {
         <label className="block text-sm font-bold text-slate-700 mb-1.5">Emergency Contact Name</label>
         <input type="text" value={data.emergencyContactName}
           onChange={e => setData({ ...data, emergencyContactName: e.target.value })}
-          className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#3835AC]/40 focus:border-[#3835AC]"
+          className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#06b6d4]/40 focus:border-[#06b6d4]"
           placeholder="Full name" />
       </div>
       <div>
         <label className="block text-sm font-bold text-slate-700 mb-1.5">Emergency Contact Phone</label>
         <input type="tel" value={data.emergencyContactPhone}
           onChange={e => setData({ ...data, emergencyContactPhone: e.target.value })}
-          className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#3835AC]/40 focus:border-[#3835AC]"
+          className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#06b6d4]/40 focus:border-[#06b6d4]"
           placeholder="+44 7700 000000" />
       </div>
       <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-700">
@@ -230,7 +230,7 @@ const OnboardingPage = () => {
 
     // Step 5: Completion
     <div key="5" className="text-center py-8 flex flex-col items-center">
-      <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#3835AC] to-cyan-400 flex items-center justify-center mb-6 shadow-lg shadow-indigo-200">
+      <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#06b6d4] to-cyan-400 flex items-center justify-center mb-6 shadow-lg shadow-cyan-200">
         <Sparkles className="w-10 h-10 text-white" />
       </div>
       <h3 className="text-2xl font-black text-slate-900 mb-3">You're all set, {user?.name?.split(' ')[0]}!</h3>
@@ -239,7 +239,7 @@ const OnboardingPage = () => {
       </p>
       <div className="grid grid-cols-2 gap-3 w-full max-w-xs text-left">
         {['AI health nudges', 'Doctor report access', 'Personalised reminders', 'Telemetry tracking'].map(f => (
-          <div key={f} className="flex items-center gap-1.5 text-xs text-indigo-700">
+          <div key={f} className="flex items-center gap-1.5 text-xs text-cyan-700">
             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" /> {f}
           </div>
         ))}
@@ -261,15 +261,15 @@ const OnboardingPage = () => {
         <div className="mb-8">
           <div className="flex justify-between text-xs text-slate-400 mb-2">
             <span>Step {step + 1} of {STEPS.length}</span>
-            <span className="font-bold text-[#3835AC]">{STEPS[step]}</span>
+            <span className="font-bold text-[#06b6d4]">{STEPS[step]}</span>
           </div>
           <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-[#3835AC] to-cyan-400 rounded-full transition-all duration-500"
+            <div className="h-full bg-gradient-to-r from-[#06b6d4] to-cyan-400 rounded-full transition-all duration-500"
               style={{ width: `${pct}%` }} />
           </div>
           <div className="flex justify-between mt-2">
             {STEPS.map((s, i) => (
-              <div key={s} className={`w-2 h-2 rounded-full transition-all ${i <= step ? 'bg-[#3835AC]' : 'bg-slate-200'}`} />
+              <div key={s} className={`w-2 h-2 rounded-full transition-all ${i <= step ? 'bg-[#06b6d4]' : 'bg-slate-200'}`} />
             ))}
           </div>
         </div>
@@ -296,7 +296,7 @@ const OnboardingPage = () => {
               else handleFinish();
             }}
             disabled={saving}
-            className="flex-1 flex items-center justify-center gap-2 py-3 bg-[#3835AC] text-white font-bold rounded-xl hover:bg-indigo-800 transition shadow-sm disabled:opacity-60 text-sm"
+            className="flex-1 flex items-center justify-center gap-2 py-3 bg-[#06b6d4] text-white font-bold rounded-xl hover:bg-cyan-800 transition shadow-sm disabled:opacity-60 text-sm"
           >
             {step === STEPS.length - 1
               ? (saving ? 'Saving…' : 'Go to My Dashboard →')

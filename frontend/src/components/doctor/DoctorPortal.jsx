@@ -18,8 +18,8 @@ const PatientCard = ({ patient, isSelected, onClick }) => {
       onClick={onClick}
       className={`w-full text-left p-4 rounded-2xl transition-all flex items-start gap-3 ${
         isSelected
-          ? 'bg-[#3835AC] text-white shadow-lg shadow-indigo-200'
-          : 'bg-white hover:bg-indigo-50 border border-slate-200'
+          ? 'bg-[#06b6d4] text-white shadow-lg shadow-cyan-200'
+          : 'bg-white hover:bg-cyan-50 border border-slate-200'
       }`}
     >
       <img src={patient.avatar} alt={patient.name} className="w-11 h-11 rounded-full object-cover flex-shrink-0 border-2 border-white/30" />
@@ -28,7 +28,7 @@ const PatientCard = ({ patient, isSelected, onClick }) => {
           <p className={`font-bold text-sm truncate ${isSelected ? 'text-white' : 'text-slate-800'}`}>{patient.name}</p>
           {unread && <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 flex-shrink-0" />}
         </div>
-        <p className={`text-xs truncate mt-0.5 ${isSelected ? 'text-indigo-200' : 'text-slate-500'}`}>{patient.condition}</p>
+        <p className={`text-xs truncate mt-0.5 ${isSelected ? 'text-cyan-200' : 'text-slate-500'}`}>{patient.condition}</p>
         <div className="flex items-center gap-2 mt-2 flex-wrap">
           <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
             isSelected ? 'bg-white/20 text-white' : patient.conditionColor
@@ -64,7 +64,7 @@ const ReportViewer = ({ patient }) => {
     <div className="flex flex-col gap-6 h-full overflow-y-auto pr-1 scrollbar-hide">
 
       {/* Auris AI Banner */}
-      <div className="bg-gradient-to-r from-[#3835AC] to-indigo-500 rounded-2xl p-5 text-white flex gap-4 items-start">
+      <div className="bg-gradient-to-r from-[#06b6d4] to-cyan-500 rounded-2xl p-5 text-white flex gap-4 items-start">
         <div className="p-2.5 bg-white/20 rounded-xl flex-shrink-0">
           <BrainCircuit className="w-6 h-6 text-white" />
         </div>
@@ -73,7 +73,7 @@ const ReportViewer = ({ patient }) => {
             <Sparkles className="w-4 h-4 text-cyan-200" />
             <span className="text-xs font-bold text-cyan-200 uppercase tracking-widest">Auris AI Insight</span>
           </div>
-          <p className="text-sm text-indigo-100 leading-relaxed">{report.aurisInsight}</p>
+          <p className="text-sm text-cyan-100 leading-relaxed">{report.aurisInsight}</p>
         </div>
       </div>
 
@@ -118,14 +118,14 @@ const ReportViewer = ({ patient }) => {
       </section>
 
       {/* Suggested Questions */}
-      <section className="bg-indigo-50 rounded-2xl p-5 border border-indigo-100">
-        <h3 className="text-xs font-black text-indigo-400 uppercase tracking-widest mb-3 flex items-center gap-1.5">
+      <section className="bg-cyan-50 rounded-2xl p-5 border border-cyan-100">
+        <h3 className="text-xs font-black text-cyan-400 uppercase tracking-widest mb-3 flex items-center gap-1.5">
           <Sparkles className="w-3.5 h-3.5" /> AI-Suggested Questions
         </h3>
         <ul className="space-y-2">
           {report.suggestedQuestions.map((q, i) => (
-            <li key={i} className="flex items-start gap-2 text-sm text-indigo-700">
-              <ChevronRight className="w-4 h-4 flex-shrink-0 mt-0.5 text-indigo-400" />
+            <li key={i} className="flex items-start gap-2 text-sm text-cyan-700">
+              <ChevronRight className="w-4 h-4 flex-shrink-0 mt-0.5 text-cyan-400" />
               <span>{q}</span>
             </li>
           ))}
@@ -171,7 +171,7 @@ const DoctorMessenger = ({ patient }) => {
             <div key={msg.id} className={`flex gap-3 ${isDoctor ? 'flex-row-reverse' : 'flex-row'}`}>
               {/* Avatar */}
               {isDoctor
-                ? <div className="w-8 h-8 rounded-full bg-[#3835AC] flex items-center justify-center flex-shrink-0">
+                ? <div className="w-8 h-8 rounded-full bg-[#06b6d4] flex items-center justify-center flex-shrink-0">
                     <Stethoscope className="w-4 h-4 text-white" />
                   </div>
                 : <img src={patient.avatar} alt={patient.name} className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
@@ -179,7 +179,7 @@ const DoctorMessenger = ({ patient }) => {
               <div className={`max-w-[75%] flex flex-col ${isDoctor ? 'items-end' : 'items-start'}`}>
                 <div className={`px-4 py-3 rounded-2xl text-sm leading-relaxed ${
                   isDoctor
-                    ? 'bg-[#3835AC] text-white rounded-tr-sm'
+                    ? 'bg-[#06b6d4] text-white rounded-tr-sm'
                     : 'bg-white border border-slate-200 text-slate-800 rounded-tl-sm shadow-sm'
                 }`}>
                   {msg.text}
@@ -201,11 +201,11 @@ const DoctorMessenger = ({ patient }) => {
           value={input}
           onChange={e => setInput(e.target.value)}
           placeholder={`Message ${patient.name.split(' ')[0]}...`}
-          className="flex-1 bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#3835AC]/50 focus:border-[#3835AC] shadow-sm"
+          className="flex-1 bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#06b6d4]/50 focus:border-[#06b6d4] shadow-sm"
         />
         <button
           type="submit"
-          className="px-4 py-3 bg-[#3835AC] text-white rounded-xl hover:bg-indigo-800 transition-colors shadow-sm flex items-center gap-2 font-bold text-sm"
+          className="px-4 py-3 bg-[#06b6d4] text-white rounded-xl hover:bg-cyan-800 transition-colors shadow-sm flex items-center gap-2 font-bold text-sm"
         >
           <Send className="w-4 h-4" />
         </button>
@@ -237,8 +237,8 @@ const DoctorPortal = () => {
       {/* Top Bar */}
       <div className="flex items-center justify-between px-6 py-4 bg-white border-b border-slate-200 flex-shrink-0">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-indigo-50 rounded-xl">
-            <Stethoscope className="w-6 h-6 text-[#3835AC]" />
+          <div className="p-2.5 bg-cyan-50 rounded-xl">
+            <Stethoscope className="w-6 h-6 text-[#06b6d4]" />
           </div>
           <div>
             <h1 className="text-xl font-black text-slate-900 tracking-tight">Doctor Portal</h1>
@@ -251,7 +251,7 @@ const DoctorPortal = () => {
               {unreadCount} Unread Report{unreadCount > 1 ? 's' : ''}
             </span>
           )}
-          <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-indigo-200">
+          <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-cyan-200">
             <img src="https://randomuser.me/api/portraits/men/40.jpg" alt="Doctor" className="w-full h-full object-cover" />
           </div>
         </div>
@@ -283,7 +283,7 @@ const DoctorPortal = () => {
 
             {/* Patient Header */}
             <div className="bg-white border-b border-slate-200 px-6 py-4 flex-shrink-0 flex items-center gap-4">
-              <img src={selectedPatient.avatar} alt={selectedPatient.name} className="w-12 h-12 rounded-full object-cover border-2 border-indigo-200" />
+              <img src={selectedPatient.avatar} alt={selectedPatient.name} className="w-12 h-12 rounded-full object-cover border-2 border-cyan-200" />
               <div className="flex-1">
                 <h2 className="font-black text-slate-900 text-lg">{selectedPatient.name}</h2>
                 <p className="text-sm text-slate-500">{selectedPatient.condition} · Age {selectedPatient.age}</p>
@@ -304,8 +304,8 @@ const DoctorPortal = () => {
                 onClick={() => setActiveTab('report')}
                 className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all ${
                   activeTab === 'report'
-                    ? 'bg-[#3835AC] text-white shadow-sm'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-indigo-50'
+                    ? 'bg-[#06b6d4] text-white shadow-sm'
+                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-cyan-50'
                 }`}
               >
                 <FileText className="w-4 h-4" /> AI Report
@@ -314,14 +314,14 @@ const DoctorPortal = () => {
                 onClick={() => setActiveTab('messages')}
                 className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all relative ${
                   activeTab === 'messages'
-                    ? 'bg-[#3835AC] text-white shadow-sm'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-indigo-50'
+                    ? 'bg-[#06b6d4] text-white shadow-sm'
+                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-cyan-50'
                 }`}
               >
                 <MessageSquare className="w-4 h-4" /> Messages
                 {selectedPatient.messages.length > 0 && (
                   <span className={`text-[10px] font-black px-1.5 py-0.5 rounded-full ${
-                    activeTab === 'messages' ? 'bg-white/20 text-white' : 'bg-indigo-100 text-[#3835AC]'
+                    activeTab === 'messages' ? 'bg-white/20 text-white' : 'bg-cyan-100 text-[#06b6d4]'
                   }`}>{selectedPatient.messages.length}</span>
                 )}
               </button>

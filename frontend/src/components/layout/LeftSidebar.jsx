@@ -58,13 +58,13 @@ const LeftSidebar = ({ onCloseMobileMenu }) => {
 
         {/* User Profile */}
         {user && (
-          <div className="flex items-center gap-3 mb-6 p-3 bg-indigo-50 rounded-2xl border border-indigo-100">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#3835AC] to-cyan-400 flex items-center justify-center flex-shrink-0">
+          <div className="flex items-center gap-3 mb-6 p-3 bg-cyan-50 rounded-2xl border border-cyan-100">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#06b6d4] to-cyan-400 flex items-center justify-center flex-shrink-0">
               <UserCircle className="w-5 h-5 text-white" />
             </div>
             <div className="min-w-0">
               <p className="text-sm font-bold text-slate-800 truncate">{user.name}</p>
-              <p className="text-xs text-indigo-500 font-medium capitalize">{user.role}</p>
+              <p className="text-xs text-cyan-500 font-medium capitalize">{user.role}</p>
             </div>
           </div>
         )}
@@ -147,8 +147,8 @@ const LeftSidebar = ({ onCloseMobileMenu }) => {
           to="/doctor"
           className={`flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all mt-2 ${
             currentPath === '/doctor'
-              ? 'bg-[#3835AC] text-white font-bold'
-              : 'bg-indigo-50 text-[#3835AC] hover:bg-[#3835AC] hover:text-white'
+              ? 'bg-[#06b6d4] text-white font-bold'
+              : 'bg-cyan-50 text-[#06b6d4] hover:bg-[#06b6d4] hover:text-white'
           }`}
         >
           <Stethoscope className="w-5 h-5 flex-shrink-0" />
