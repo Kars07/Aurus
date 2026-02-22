@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 
-const WEBSOCKET_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:8001/ws/telemetry';
+const WEBSOCKET_URL = import.meta.env.VITE_WS_URL || 'wss://auris-1-82up.onrender.com/ws/telemetry';
 
 export const useAegisTelemetry = () => {
   const [telemetry, setTelemetry] = useState({

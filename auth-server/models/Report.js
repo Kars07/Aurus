@@ -8,7 +8,7 @@ const reportSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ['snapshot', 'journal'],
+    // Removed enum to support 'advocate_brief', 'flare_analysis', etc.
     required: true
   },
   data: {

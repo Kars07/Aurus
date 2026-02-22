@@ -102,7 +102,7 @@ const JournalingInput = () => {
 
     try {
       // Hit NAT Agent Server via Vite Proxy
-      const response = await fetch('https://auris-1-82up.onrender.com/v1/chat/completions', {
+      const response = await fetch('https://auris-w1og.onrender.com/api/ai/chat/completions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

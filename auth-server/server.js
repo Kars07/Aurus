@@ -18,6 +18,22 @@ app.use('/api/messages', require('./routes/messages').router);
 app.get('/', (_, res) => res.json({ status: 'live', service: 'Auris Auth API' }));
 app.get('/health', (_, res) => res.json({ status: 'ok', service: 'Auris Auth Server' }));
 
+// ── AI Proxy (Bypasses Browser CORS) ─────────────────────────────────────────
+app.post('/api/ai/chat/completions', async (req, res) => {
+  try {
+    const aiRes = await fetch('https://auris-1-82up.onrender.com/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(req.body)
+    });
+    const data = await aiRes.json();
+    return res.status(aiRes.status).json(data);
+  } catch (err) {
+    console.error('AI Proxy Error:', err);
+    return res.status(500).json({ error: 'Failed to proxy request to NAT Agent' });
+  }
+});
+
 // ── Connect to MongoDB & Start ────────────────────────────────────────────────
 const PORT = process.env.PORT || 3001;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/auris';
