@@ -11,7 +11,7 @@ const HealthDetective = () => {
   const handleInvestigate = async (e) => {
     e.preventDefault();
     if (!query.trim()) return;
-    
+
     setIsSearching(true);
     setResult(null);
 
@@ -66,7 +66,7 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
   };
 
   return (
-    <div className="rounded-2xl p-6 bg-white border border-slate-200 shadow-sm overflow-hidden relative">
+    <div className="rounded-2xl p-6 bg-white border border-slate-200 shadow-sm overflow-y-auto scrollbar-hide max-h-[500px] relative">
       <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
         <Sparkles className="w-24 h-24 text-cyan-400" />
       </div>

@@ -16,11 +16,10 @@ const PatientCard = ({ patient, isSelected, onClick }) => {
   return (
     <button
       onClick={onClick}
-      className={`w-full text-left p-4 rounded-2xl transition-all flex items-start gap-3 ${
-        isSelected
+      className={`w-full text-left p-4 rounded-2xl transition-all flex items-start gap-3 ${isSelected
           ? 'bg-[#06b6d4] text-white shadow-lg shadow-cyan-200'
           : 'bg-white hover:bg-cyan-50 border border-slate-200'
-      }`}
+        }`}
     >
       <img src={patient.avatar} alt={patient.name} className="w-11 h-11 rounded-full object-cover flex-shrink-0 border-2 border-white/30" />
       <div className="flex-1 min-w-0">
@@ -30,17 +29,14 @@ const PatientCard = ({ patient, isSelected, onClick }) => {
         </div>
         <p className={`text-xs truncate mt-0.5 ${isSelected ? 'text-cyan-200' : 'text-slate-500'}`}>{patient.condition}</p>
         <div className="flex items-center gap-2 mt-2 flex-wrap">
-          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-            isSelected ? 'bg-white/20 text-white' : patient.conditionColor
-          }`}>{patient.conditionTag}</span>
+          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${isSelected ? 'bg-white/20 text-white' : patient.conditionColor
+            }`}>{patient.conditionTag}</span>
           {isAiReport ? (
-            <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-              isSelected ? 'bg-cyan-400/30 text-white' : 'bg-cyan-50 text-cyan-700'
-            }`}>✦ Live AI Report</span>
+            <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${isSelected ? 'bg-cyan-400/30 text-white' : 'bg-cyan-50 text-cyan-700'
+              }`}>✦ Live AI Report</span>
           ) : (
-            <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-              isSelected ? 'bg-white/20 text-white' : patient.riskColor
-            }`}>{patient.riskLevel} Risk</span>
+            <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${isSelected ? 'bg-white/20 text-white' : patient.riskColor
+              }`}>{patient.riskLevel} Risk</span>
           )}
         </div>
       </div>
@@ -106,7 +102,7 @@ const ReportViewer = ({ patient }) => {
 
       {/* Plan */}
       <section className="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-        <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Clinical Plan</h3>
+        <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Statement From Patient</h3>
         <ul className="space-y-2.5">
           {report.plan.map((item, i) => (
             <li key={i} className="flex items-start gap-2.5 text-sm text-slate-700">
@@ -152,7 +148,7 @@ const DoctorMessenger = ({ patient }) => {
   const handleSend = (e) => {
     e.preventDefault();
     if (!input.trim()) return;
-    sendMessage(patient.id, input.trim());
+    sendMessage(patient.patientId, input.trim());
     setInput('');
   };
 
@@ -163,7 +159,7 @@ const DoctorMessenger = ({ patient }) => {
         {msgs.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center opacity-40">
             <MessageSquare className="w-10 h-10 mb-3 text-slate-300" />
-            <p className="text-sm font-medium text-slate-400">No messages yet.<br/>Send one to start the conversation.</p>
+            <p className="text-sm font-medium text-slate-400">No messages yet.<br />Send one to start the conversation.</p>
           </div>
         ) : msgs.map((msg) => {
           const isDoctor = msg.from === 'doctor';
@@ -172,16 +168,15 @@ const DoctorMessenger = ({ patient }) => {
               {/* Avatar */}
               {isDoctor
                 ? <div className="w-8 h-8 rounded-full bg-[#06b6d4] flex items-center justify-center flex-shrink-0">
-                    <Stethoscope className="w-4 h-4 text-white" />
-                  </div>
+                  <Stethoscope className="w-4 h-4 text-white" />
+                </div>
                 : <img src={patient.avatar} alt={patient.name} className="w-8 h-8 rounded-full object-cover flex-shrink-0" />
               }
               <div className={`max-w-[75%] flex flex-col ${isDoctor ? 'items-end' : 'items-start'}`}>
-                <div className={`px-4 py-3 rounded-2xl text-sm leading-relaxed ${
-                  isDoctor
+                <div className={`px-4 py-3 rounded-2xl text-sm leading-relaxed ${isDoctor
                     ? 'bg-[#06b6d4] text-white rounded-tr-sm'
                     : 'bg-white border border-slate-200 text-slate-800 rounded-tl-sm shadow-sm'
-                }`}>
+                  }`}>
                   {msg.text}
                 </div>
                 <p className="text-[10px] text-slate-400 mt-1 flex items-center gap-1">
@@ -302,27 +297,24 @@ const DoctorPortal = () => {
             <div className="flex gap-1 px-6 pt-4 flex-shrink-0">
               <button
                 onClick={() => setActiveTab('report')}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all ${
-                  activeTab === 'report'
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all ${activeTab === 'report'
                     ? 'bg-[#06b6d4] text-white shadow-sm'
                     : 'bg-white text-slate-600 border border-slate-200 hover:bg-cyan-50'
-                }`}
+                  }`}
               >
                 <FileText className="w-4 h-4" /> AI Report
               </button>
               <button
                 onClick={() => setActiveTab('messages')}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all relative ${
-                  activeTab === 'messages'
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all relative ${activeTab === 'messages'
                     ? 'bg-[#06b6d4] text-white shadow-sm'
                     : 'bg-white text-slate-600 border border-slate-200 hover:bg-cyan-50'
-                }`}
+                  }`}
               >
                 <MessageSquare className="w-4 h-4" /> Messages
                 {selectedPatient.messages.length > 0 && (
-                  <span className={`text-[10px] font-black px-1.5 py-0.5 rounded-full ${
-                    activeTab === 'messages' ? 'bg-white/20 text-white' : 'bg-cyan-100 text-[#06b6d4]'
-                  }`}>{selectedPatient.messages.length}</span>
+                  <span className={`text-[10px] font-black px-1.5 py-0.5 rounded-full ${activeTab === 'messages' ? 'bg-white/20 text-white' : 'bg-cyan-100 text-[#06b6d4]'
+                    }`}>{selectedPatient.messages.length}</span>
                 )}
               </button>
             </div>

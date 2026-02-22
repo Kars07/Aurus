@@ -39,13 +39,13 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
 
         const firstBrace = content.indexOf('{');
         const lastBrace = content.lastIndexOf('}');
-        
+
         if (firstBrace !== -1 && lastBrace !== -1) {
           content = content.substring(firstBrace, lastBrace + 1);
         } else {
           throw new Error("No JSON object found.");
         }
-        
+
         setFlareData(JSON.parse(content));
       } catch (err) {
         console.error("Flare Predictor Error:", err);
@@ -91,8 +91,8 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
         {isHighRisk ? <AlertTriangle className="w-6 h-6 text-red-500" /> : <ShieldCheck className="w-6 h-6 text-cyan-500" />}
       </div>
 
-      <div className="flex items-center space-x-6">
-        
+      <div className="flex flex-col items-center gap-4 text-center">
+
         {/* SVG Dial */}
         <div className="relative w-24 h-24 flex-shrink-0">
           <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
@@ -122,10 +122,10 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
           <h4 className="text-lg font-bold text-slate-800 mb-1">
             Likely {flareData.predicted_symptom}
           </h4>
-          <p className="text-sm text-slate-600 leading-relaxed mb-3">
+          <p className="text-sm text-slate-600 leading-relaxed mb-4">
             {flareData.reasoning}
           </p>
-          <div className={`text-sm px-3 py-2 rounded-lg ${isHighRisk ? 'bg-red-50 text-red-800' : 'bg-cyan-50 text-cyan-800'} font-medium`}>
+          <div className={`inline-block text-sm px-4 py-2.5 rounded-xl ${isHighRisk ? 'bg-red-50 text-red-800 border border-red-100' : 'bg-cyan-50 text-cyan-800 border border-cyan-100'} font-medium`}>
             <strong>Action:</strong> {flareData.preventative_action}
           </div>
         </div>

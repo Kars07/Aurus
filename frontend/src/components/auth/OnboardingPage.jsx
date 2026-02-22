@@ -3,18 +3,21 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { CheckCircle2, ChevronRight, ChevronLeft, Sparkles } from 'lucide-react';
 
-const DISABILITIES = [
+const HEALTH_CATEGORIES = [
+  'None / Generally Healthy',
   'Mobility Impairment', 'Spinal Cord Injury', 'Multiple Sclerosis',
   'Cerebral Palsy', 'Chronic Pain', 'Arthritis / Joint Disease',
   'Visual Impairment', 'Hearing Impairment', 'Neurological Condition',
   'Cognitive / Memory Issues', 'Respiratory Condition', 'Diabetes',
-  'Cardiovascular Disease', 'Mental Health Condition', 'Other'
+  'Cardiovascular Disease', 'Mental Health Condition', 'Prefer not to say', 'Other'
 ];
 
 const GOALS = [
-  'Reduce pain levels', 'Improve sleep quality', 'Increase daily mobility',
-  'Better medication management', 'Get AI health insights',
-  'Share reports with my doctor', 'Track long-term trends', 'Manage stress & anxiety'
+  'Improve overall wellbeing', 'Improve sleep quality', 'Manage stress & anxiety',
+  'Build healthy daily habits', 'Get AI health insights', 'Track fitness & activity',
+  'Reduce pain levels', 'Increase daily mobility',
+  'Better medication management', 'Share reports with my doctor',
+  'Track long-term trends', 'Monitor heart health', 'Boost energy levels'
 ];
 
 const STEPS = ['About You', 'Condition', 'Daily Living', 'Medications & Goals', 'Emergency Contact', 'All Set!'];
@@ -38,11 +41,10 @@ const SliderInput = ({ label, value, onChange, min = 1, max = 10, color }) => (
 
 const Chip = ({ label, selected, onClick }) => (
   <button type="button" onClick={onClick}
-    className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
-      selected
-        ? 'bg-[#06b6d4] text-white border-[#06b6d4] shadow-sm'
-        : 'bg-white text-slate-600 border-slate-200 hover:border-cyan-300 hover:text-[#06b6d4]'
-    }`}>
+    className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${selected
+      ? 'bg-[#06b6d4] text-white border-[#06b6d4] shadow-sm'
+      : 'bg-white text-slate-600 border-slate-200 hover:border-cyan-300 hover:text-[#06b6d4]'
+      }`}>
     {label}
   </button>
 );
@@ -90,7 +92,7 @@ const OnboardingPage = () => {
     try {
       const { medInput, ...bioData } = data;
       await saveOnboarding(bioData);
-      navigate('/');
+      navigate('/', { state: { showDeviceModal: true } });
     } catch (e) {
       console.error(e);
     } finally {
@@ -116,9 +118,8 @@ const OnboardingPage = () => {
           {['Male', 'Female', 'Non-binary', 'Prefer not to say'].map(g => (
             <button key={g} type="button"
               onClick={() => setData({ ...data, gender: g })}
-              className={`px-4 py-2 rounded-xl text-sm font-semibold border transition-all ${
-                data.gender === g ? 'bg-[#06b6d4] text-white border-[#06b6d4]' : 'bg-white text-slate-600 border-slate-200 hover:border-cyan-200'
-              }`}>{g}</button>
+              className={`px-4 py-2 rounded-xl text-sm font-semibold border transition-all ${data.gender === g ? 'bg-[#06b6d4] text-white border-[#06b6d4]' : 'bg-white text-slate-600 border-slate-200 hover:border-cyan-200'
+                }`}>{g}</button>
           ))}
         </div>
       </div>
@@ -127,26 +128,28 @@ const OnboardingPage = () => {
     // Step 1: Condition
     <div key="1" className="space-y-5">
       <div>
-        <label className="block text-sm font-bold text-slate-700 mb-1.5">Primary Condition / Diagnosis</label>
+        <label className="block text-sm font-bold text-slate-700 mb-1">Primary Condition / Diagnosis <span className="text-slate-400 font-normal">(optional)</span></label>
+        <p className="text-xs text-slate-400 mb-2">Leave blank if you don't have a specific diagnosis — Auris works for everyone.</p>
         <input type="text"
           value={data.primaryCondition} onChange={e => setData({ ...data, primaryCondition: e.target.value })}
           className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#06b6d4]/40 focus:border-[#06b6d4]"
-          placeholder="e.g. Rheumatoid Arthritis, MS, Spinal Cord Injury…" />
+          placeholder="e.g. Arthritis, Diabetes, or leave blank" />
       </div>
       <div>
-        <label className="block text-sm font-bold text-slate-700 mb-1.5">How long have you had this condition?</label>
+        <label className="block text-sm font-bold text-slate-700 mb-1.5">How long have you had this condition? <span className="text-slate-400 font-normal">(optional)</span></label>
         <select value={data.conditionDuration} onChange={e => setData({ ...data, conditionDuration: e.target.value })}
           className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#06b6d4]/40 focus:border-[#06b6d4] bg-white">
-          <option value="">Select duration</option>
+          <option value="">Not applicable / Prefer not to say</option>
           {['Less than 6 months', '6–12 months', '1–3 years', '3–5 years', '5–10 years', '10+ years'].map(d => (
             <option key={d} value={d}>{d}</option>
           ))}
         </select>
       </div>
       <div>
-        <label className="block text-sm font-bold text-slate-700 mb-2">Disability categories (select all that apply)</label>
+        <label className="block text-sm font-bold text-slate-700 mb-1">Health categories <span className="text-slate-400 font-normal">(select all that apply)</span></label>
+        <p className="text-xs text-slate-400 mb-2">Select "None / Generally Healthy" if none apply to you.</p>
         <div className="flex flex-wrap gap-2 max-h-48 overflow-y-auto">
-          {DISABILITIES.map(d => (
+          {HEALTH_CATEGORIES.map(d => (
             <Chip key={d} label={d} selected={data.disabilities.includes(d)} onClick={() => toggle('disabilities', d)} />
           ))}
         </div>
@@ -155,10 +158,11 @@ const OnboardingPage = () => {
 
     // Step 2: Daily Living
     <div key="2" className="space-y-6">
-      <SliderInput label="Current Mobility Level" value={data.mobilityLevel}
+      <p className="text-xs text-slate-400 -mt-2">These sliders help Auris personalise your insights. If something doesn't apply, just leave it at the middle.</p>
+      <SliderInput label="Physical Activity / Mobility Level" value={data.mobilityLevel}
         onChange={v => setData({ ...data, mobilityLevel: v })}
         color={data.mobilityLevel >= 7 ? 'text-emerald-600' : data.mobilityLevel >= 4 ? 'text-amber-600' : 'text-red-600'} />
-      <SliderInput label="Current Pain Level" value={data.painLevel}
+      <SliderInput label="Current Discomfort / Pain Level" value={data.painLevel}
         onChange={v => setData({ ...data, painLevel: v })}
         color={data.painLevel >= 7 ? 'text-red-600' : data.painLevel >= 4 ? 'text-amber-600' : 'text-emerald-600'} />
       <div>
@@ -167,9 +171,8 @@ const OnboardingPage = () => {
           {[{ v: 'poor', l: '😴 Poor', c: 'text-red-600' }, { v: 'fair', l: '😐 Fair', c: 'text-amber-600' }, { v: 'good', l: '😊 Good', c: 'text-emerald-600' }].map(({ v, l }) => (
             <button key={v} type="button"
               onClick={() => setData({ ...data, sleepQuality: v })}
-              className={`flex-1 py-2.5 rounded-xl text-sm font-semibold border transition-all ${
-                data.sleepQuality === v ? 'bg-[#06b6d4] text-white border-[#06b6d4]' : 'bg-white text-slate-600 border-slate-200 hover:border-cyan-200'
-              }`}>{l}</button>
+              className={`flex-1 py-2.5 rounded-xl text-sm font-semibold border transition-all ${data.sleepQuality === v ? 'bg-[#06b6d4] text-white border-[#06b6d4]' : 'bg-white text-slate-600 border-slate-200 hover:border-cyan-200'
+                }`}>{l}</button>
           ))}
         </div>
       </div>
@@ -301,8 +304,8 @@ const OnboardingPage = () => {
             {step === STEPS.length - 1
               ? (saving ? 'Saving…' : 'Go to My Dashboard →')
               : step === STEPS.length - 2
-              ? 'See Summary'
-              : (<>Continue <ChevronRight className="w-4 h-4" /></>)
+                ? 'See Summary'
+                : (<>Continue <ChevronRight className="w-4 h-4" /></>)
             }
           </button>
         </div>

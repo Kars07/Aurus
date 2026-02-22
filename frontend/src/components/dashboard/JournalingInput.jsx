@@ -30,7 +30,7 @@ const JournalingInput = () => {
         recognitionRef.current = new SpeechRecognition();
         recognitionRef.current.continuous = true;
         recognitionRef.current.interimResults = true;
-        
+
         recognitionRef.current.onresult = (event) => {
           let currentTranscript = '';
           for (let i = 0; i < event.results.length; i++) {
@@ -60,7 +60,7 @@ const JournalingInput = () => {
       recognitionRef.current.stop();
     }
     setIsRecording(false);
-    
+
     // Give the Web Speech API a moment to capture the final word
     setTimeout(() => {
       processVoiceLog(transcriptRef.current);
@@ -74,10 +74,10 @@ const JournalingInput = () => {
 
   const processVoiceLog = async (finalTranscript) => {
     setIsProcessing(true);
-    
+
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     let textToProcess = finalTranscript || transcript;
-    
+
     // Only apply the speech API error if they actually pressed the mic button (finalTranscript/transcript empty but manualText is also empty)
     if (!textToProcess && !manualText) {
       if (!SpeechRecognition) {
@@ -86,7 +86,7 @@ const JournalingInput = () => {
         textToProcess = "[No speech detected. Please hold the button and speak clearly.]";
       }
     }
-    
+
     setTranscript(textToProcess);
     setManualText(''); // Clear manual input after submission
 
@@ -107,32 +107,32 @@ const JournalingInput = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           messages: [{ role: 'user', content: systemPrompt }],
           model: 'nvidia/nemotron',
           temperature: 0.1,
           stream: false
         }),
       });
-      
+
       const data = await response.json();
       let content = data.choices[0].message.content;
-      
+
       // Highly robust JSON extractor to strip out "Thought:", "Final Answer:", and Markdown wrappers
       const firstBrace = content.indexOf('{');
       const lastBrace = content.lastIndexOf('}');
-      
+
       if (firstBrace !== -1 && lastBrace !== -1) {
         content = content.substring(firstBrace, lastBrace + 1);
       } else {
         throw new Error("No JSON object found in the LLM response.");
       }
-      
+
       const payload = JSON.parse(content);
-      
+
       const savedNudge = payload.patient_facing_nudge || "I hear you. Let me know if you need any specific exercises or support.";
       setNudge(savedNudge);
-      
+
       addEntry({
         type: 'journal',
         transcript: textToProcess,
@@ -174,8 +174,8 @@ const JournalingInput = () => {
           aria-label={isRecording ? "Stop Recording" : "Hold to Speak"}
           className={`
             w-40 h-40 rounded-full flex flex-col items-center justify-center shadow-xl transition-all duration-300
-            ${isRecording 
-              ? 'bg-red-50 text-red-600 scale-95 border-4 border-red-200 animate-pulse' 
+            ${isRecording
+              ? 'bg-red-50 text-red-600 scale-95 border-4 border-red-200 animate-pulse'
               : 'bg-gradient-to-br from-cyan-400 to-[#06b6d4] text-white hover:scale-105 hover:shadow-cyan-200/50'
             }
             focus:outline-none focus:ring-4 focus:ring-cyan-300 focus:ring-offset-4
@@ -189,7 +189,7 @@ const JournalingInput = () => {
           ) : (
             <>
               <Mic className="w-12 h-12 mb-2" />
-              <span className="font-bold text-lg tracking-wide leading-tight">Hold to<br/>Speak</span>
+              <span className="font-bold text-lg tracking-wide leading-tight">Hold to<br />Speak</span>
             </>
           )}
         </button>
@@ -199,8 +199,8 @@ const JournalingInput = () => {
       <div className="mt-8">
         <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wider pl-1 mb-2">Or type manually:</h4>
         <div className="flex gap-2">
-          <input 
-            type="text" 
+          <input
+            type="text"
             value={manualText}
             onChange={(e) => setManualText(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleManualSubmit()}
@@ -208,7 +208,7 @@ const JournalingInput = () => {
             className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-shadow"
             disabled={isProcessing}
           />
-          <button 
+          <button
             onClick={handleManualSubmit}
             disabled={isProcessing || !manualText.trim()}
             className="bg-gray-900 hover:bg-gray-800 disabled:bg-gray-300 text-white px-6 py-3 rounded-xl font-medium transition-colors"
@@ -218,37 +218,39 @@ const JournalingInput = () => {
         </div>
       </div>
 
-      <div className="mt-6 min-h-[8rem] bg-[#F6FAFF] rounded-xl p-5 border border-blue-50">
-        {isProcessing && (
-          <div className="flex items-center justify-center h-full text-cyan-600 space-x-2">
-           <div className="w-2 h-2 bg-cyan-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-           <div className="w-2 h-2 bg-cyan-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-           <div className="w-2 h-2 bg-cyan-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-          </div>
-        )}
-        
+      <div className="mt-6 min-h-[8rem] bg-[#F6FAFF] rounded-xl p-5 border border-blue-50 relative">
+
+        {/* If doing nothing at all */}
         {!isProcessing && !transcript && !nudge && (
           <p className="text-gray-400 text-center italic mt-4">
             "Your voice is a powerful biomarker. Vent about your day to receive immediate support."
           </p>
         )}
 
+        {/* The user's input/transcript area */}
         {transcript && (
           <div className="mb-4">
-             <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">You said:</span>
-             <p className="text-gray-800 font-medium mt-1">"{transcript}"</p>
+            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">You said:</span>
+            <p className="text-gray-800 font-medium mt-1">"{transcript}"</p>
           </div>
         )}
 
-        {nudge && (
-          <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-cyan-400">
-             <div className="flex items-center gap-2 mb-1">
-                <Sparkles className="w-4 h-4 text-cyan-500" />
-                <span className="text-sm font-bold text-cyan-700">Prevention Nudge</span>
-             </div>
-             <p className="text-gray-700 font-medium leading-relaxed">{nudge}</p>
+        {/* The AI's response OR a loading indicator */}
+        {isProcessing ? (
+          <div className="flex items-center gap-2 mt-4 ml-2">
+            <div className="w-2 h-2 bg-cyan-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+            <div className="w-2 h-2 bg-cyan-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+            <div className="w-2 h-2 bg-cyan-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
           </div>
-        )}
+        ) : nudge ? (
+          <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-cyan-400">
+            <div className="flex items-center gap-2 mb-1">
+              <Sparkles className="w-4 h-4 text-cyan-500" />
+              <span className="text-sm font-bold text-cyan-700">Prevention Nudge</span>
+            </div>
+            <p className="text-gray-700 font-medium leading-relaxed">{nudge}</p>
+          </div>
+        ) : null}
       </div>
     </div>
   );

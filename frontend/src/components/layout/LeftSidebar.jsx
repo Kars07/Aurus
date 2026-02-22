@@ -27,27 +27,27 @@ const LeftSidebar = ({ onCloseMobileMenu }) => {
   // Different nav items tailored to the user role
   const navItemsGeneral = user?.role === 'doctor'
     ? [
-        { icon: CalendarRange, label: "Calendar", path: "/calendar" },
-        { icon: SquarePlus, label: "Appointments", path: "/appointments" },
-        { icon: ChartNoAxesCombined, label: "Statistics", path: "/statistics" },
-      ]
+      { icon: CalendarRange, label: "Calendar", path: "/calendar" },
+      { icon: SquarePlus, label: "Appointments", path: "/appointments" },
+      { icon: ChartNoAxesCombined, label: "Statistics", path: "/statistics" },
+    ]
     : [
-        { icon: LayoutDashboard, label: "Dashboard", path: "/" },
-        { icon: CalendarRange, label: "Calendar", path: "/calendar" },
-        { icon: SquarePlus, label: "Appointments", path: "/appointments" },
-        { icon: ChartNoAxesCombined, label: "Statistics", path: "/statistics" },
-      ];
+      { icon: LayoutDashboard, label: "Dashboard", path: "/" },
+      { icon: CalendarRange, label: "Calendar", path: "/calendar" },
+      { icon: SquarePlus, label: "Appointments", path: "/appointments" },
+      { icon: ChartNoAxesCombined, label: "Statistics", path: "/statistics" },
+    ];
 
-  const navItemsTools = user?.role === 'doctor' 
+  const navItemsTools = user?.role === 'doctor'
     ? [] // Tools are patient-only in this version
     : [
-        { icon: MessageCircleMore, label: "Generate Report", path: "/chat" },
-        { icon: Bot, label: "AI Support", path: "/ai-support" },
-        { icon: Phone, label: "Contact a Doctor", path: "/doctor-chat" },
-      ];
+      { icon: MessageCircleMore, label: "Generate Report", path: "/chat" },
+      { icon: Bot, label: "AI Support", path: "/ai-support" },
+      { icon: Phone, label: "Contact a Doctor", path: "/doctor-chat" },
+    ];
 
   return (
-    <aside className="bg-[#F6FAFF] w-64 h-screen border-r border-gray-200 p-6 flex flex-col justify-between">
+    <aside className="bg-[#F6FAFF] w-64 h-screen border-r border-gray-200 p-6 flex flex-col justify-between overflow-y-auto scrollbar-hide">
       {/* Top Section */}
       <div>
         {/* Logo and Mobile Close */}
@@ -57,8 +57,8 @@ const LeftSidebar = ({ onCloseMobileMenu }) => {
           </h1>
           {onCloseMobileMenu && (
             <button
-               onClick={onCloseMobileMenu}
-               className="md:hidden p-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"
+              onClick={onCloseMobileMenu}
+              className="md:hidden p-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -67,7 +67,7 @@ const LeftSidebar = ({ onCloseMobileMenu }) => {
 
         {/* User Profile */}
         {user && (
-          <div className="flex items-center gap-3 mb-6 p-3 bg-cyan-50 rounded-2xl border border-cyan-100">
+          <div className="flex items-center gap-3 mb-4 p-3 bg-cyan-50 rounded-2xl border border-cyan-100">
             <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#06b6d4] to-cyan-400 flex items-center justify-center flex-shrink-0">
               <UserCircle className="w-5 h-5 text-white" />
             </div>
@@ -76,6 +76,21 @@ const LeftSidebar = ({ onCloseMobileMenu }) => {
               <p className="text-xs text-cyan-500 font-medium capitalize">{user.role}</p>
             </div>
           </div>
+        )}
+
+        {/* Doctor Portal Entry (top) */}
+        {user?.role === 'doctor' && (
+          <Link
+            to="/doctor"
+            className={`flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all mb-6 ${currentPath === '/doctor'
+                ? 'bg-[#06b6d4] text-white font-bold'
+                : 'bg-cyan-50 text-[#06b6d4] hover:bg-[#06b6d4] hover:text-white'
+              }`}
+          >
+            <Stethoscope className="w-5 h-5 flex-shrink-0" />
+            <span className="font-bold text-sm">Doctor Portal</span>
+            <span className="ml-auto text-[10px] font-black bg-white/20 border border-current px-1.5 py-0.5 rounded-full">Dr.</span>
+          </Link>
         )}
 
         {/* General Nav */}
@@ -153,21 +168,7 @@ const LeftSidebar = ({ onCloseMobileMenu }) => {
           <span className={currentPath === "/settings" ? "font-bold" : "font-medium"}>Setting</span>
         </Link>
 
-        {/* Doctor Portal Entry */}
-        {user?.role === 'doctor' && (
-          <Link
-            to="/doctor"
-            className={`flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all mt-2 ${
-              currentPath === '/doctor'
-                ? 'bg-[#06b6d4] text-white font-bold'
-                : 'bg-cyan-50 text-[#06b6d4] hover:bg-[#06b6d4] hover:text-white'
-            }`}
-          >
-            <Stethoscope className="w-5 h-5 flex-shrink-0" />
-            <span className="font-bold text-sm">Doctor Portal</span>
-            <span className="ml-auto text-[10px] font-black bg-white/20 border border-current px-1.5 py-0.5 rounded-full">Dr.</span>
-          </Link>
-        )}
+
 
         {/* Logout */}
         <button

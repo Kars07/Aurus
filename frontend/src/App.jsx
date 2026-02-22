@@ -13,6 +13,7 @@ import RightSidebar from './components/layout/RightSidebar'
 import LoginPage from './components/auth/LoginPage'
 import SignupPage from './components/auth/SignupPage'
 import OnboardingPage from './components/auth/OnboardingPage'
+import DeviceConnectionModal from './components/dashboard/DeviceConnectionModal'
 import { ProtectedRoute, PatientRoute, GuestRoute } from './components/auth/RouteGuards'
 import './App.css'
 import { HistoryProvider } from './context/HistoryContext';
@@ -22,6 +23,7 @@ import { DoctorProvider } from './context/DoctorContext';
 import DoctorPortal from './components/doctor/DoctorPortal';
 import DoctorChat from './components/dashboard/DoctorChat';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 // Pages that should show the app shell (sidebar + header)
 const SHELL_PATHS = ['/', '/chat', '/ai-support', '/appointments', '/statistics', '/doctor', '/doctor-chat'];
@@ -32,20 +34,36 @@ const AppContent = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const isAuthPage = ['/login', '/signup', '/onboarding'].includes(location.pathname);
 
+  // Track device modal state based on navigation from onboarding
+  const [showDeviceModal, setShowDeviceModal] = useState(false);
+
+  useEffect(() => {
+    if (location.state?.showDeviceModal) {
+      setShowDeviceModal(true);
+      // Clean up the location state so it doesn't trigger again on refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
+
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[#F6FAFF] text-slate-800">
       <AegisOverlay />
+
+      {showDeviceModal && (
+        <DeviceConnectionModal onComplete={() => setShowDeviceModal(false)} />
+      )}
+
       {/* Auth pages: full-screen, no sidebar */}
       {isAuthPage ? (
-        <div className="flex-1">
+        <div className={`flex-1 overflow-y-auto ${showDeviceModal ? 'blur-md pointer-events-none opacity-50 transition-all' : ''}`}>
           <Routes>
-            <Route path="/login"      element={<GuestRoute><LoginPage /></GuestRoute>} />
-            <Route path="/signup"     element={<GuestRoute><SignupPage /></GuestRoute>} />
+            <Route path="/login" element={<GuestRoute><LoginPage /></GuestRoute>} />
+            <Route path="/signup" element={<GuestRoute><SignupPage /></GuestRoute>} />
             <Route path="/onboarding" element={<ProtectedRoute><OnboardingPage /></ProtectedRoute>} />
           </Routes>
         </div>
       ) : (
-        <>
+        <div className={`flex flex-1 w-full h-full ${showDeviceModal ? 'blur-md pointer-events-none opacity-50 transition-all duration-500' : 'transition-all duration-500'}`}>
           {/* Mobile Sidebar Overlay */}
           {isMobileMenuOpen && (
             <div
@@ -68,17 +86,17 @@ const AppContent = () => {
             <Header onMenuClick={() => setIsMobileMenuOpen(true)} />
             <div className="flex-1 overflow-y-auto scrollbar-hide">
               <Routes>
-                <Route path="/"            element={<PatientRoute><DashboardMainContent /></PatientRoute>} />
-                <Route path="/calendar"    element={<PatientRoute><CalendarPage /></PatientRoute>} />
-                <Route path="/chat"        element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
-                <Route path="/ai-support"  element={<ProtectedRoute><AISupportPage /></ProtectedRoute>} />
+                <Route path="/" element={<PatientRoute><DashboardMainContent /></PatientRoute>} />
+                <Route path="/calendar" element={<PatientRoute><CalendarPage /></PatientRoute>} />
+                <Route path="/chat" element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
+                <Route path="/ai-support" element={<ProtectedRoute><AISupportPage /></ProtectedRoute>} />
                 <Route path="/appointments" element={<ProtectedRoute><AppointmentsPage /></ProtectedRoute>} />
-                <Route path="/statistics"  element={<ProtectedRoute><StatisticsPage /></ProtectedRoute>} />
-                <Route path="/settings"    element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
+                <Route path="/statistics" element={<ProtectedRoute><StatisticsPage /></ProtectedRoute>} />
+                <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
                 <Route path="/doctor-chat" element={<PatientRoute><DoctorChat /></PatientRoute>} />
-                <Route path="/doctor"      element={<ProtectedRoute><DoctorProvider><DoctorPortal /></DoctorProvider></ProtectedRoute>} />
+                <Route path="/doctor" element={<ProtectedRoute><DoctorProvider><DoctorPortal /></DoctorProvider></ProtectedRoute>} />
                 {/* Catch-all → login */}
-                <Route path="*"            element={<Navigate to="/login" replace />} />
+                <Route path="*" element={<Navigate to="/login" replace />} />
               </Routes>
             </div>
           </div>
@@ -89,7 +107,7 @@ const AppContent = () => {
               <RightSidebar />
             </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );

@@ -120,11 +120,7 @@ const LoginPage = () => {
             <Link to="/signup" className="text-[#06b6d4] font-bold hover:underline">Create one</Link>
           </p>
 
-          {/* Quick demo hint */}
-          <div className="mt-8 p-4 bg-cyan-50 rounded-2xl border border-cyan-100 text-xs text-cyan-600">
-            <p className="font-bold mb-1">Demo accounts (after signup):</p>
-            <p>Patient: any email / doctor: include "dr" or "doctor" in email and select Doctor role</p>
-          </div>
+          
         </div>
       </div>
     </div>
