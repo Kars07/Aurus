@@ -5,6 +5,7 @@ import AegisOverlay from '../dashboard/AegisOverlay';
 import FlarePredictor from '../dashboard/FlarePredictor';
 import VagalToneWidget from '../dashboard/VagalToneWidget';
 import AnatomySection from '../dashboard/AnatomySection';
+import SnowParticles from '../dashboard/SnowParticles';
 import { useAegisTelemetry } from '../../hooks/useAegisTelemetry';
 import { useAuth } from '../../context/AuthContext';
 
@@ -33,10 +34,12 @@ const DashboardMainContent = () => {
   };
 
   return (
-    <main className="flex-1 overflow-y-auto min-h-full bg-transparent text-slate-800">
+    <main className="flex-1 overflow-y-auto min-h-full bg-transparent text-slate-800 relative isolation">
+      <SnowParticles count={40} />
       <AegisOverlay />
+      
       <motion.div 
-        className="max-w-7xl mx-auto p-4 md:p-8"
+        className="max-w-7xl mx-auto p-4 md:p-8 relative z-10"
         initial="hidden"
         animate="visible"
         variants={containerVariants}
