@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Activity, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { useHistory } from '../../context/HistoryContext';
+import { motion } from 'framer-motion';
 
 const FlarePredictor = ({ telemetry }) => {
   const { history } = useHistory();
@@ -65,10 +66,13 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
 
   if (loading) {
     return (
-      <div className="bg-white rounded-2xl p-6 border border-slate-200 animate-pulse opacity-50 flex items-center justify-center">
+      <motion.div 
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+        className="bg-white rounded-2xl p-6 border border-slate-200 flex items-center justify-center min-h-[200px]"
+      >
         <Activity className="w-8 h-8 text-cyan-500 animate-spin" />
         <span className="text-slate-500 font-medium ml-3">Calculating Flare Risk...</span>
-      </div>
+      </motion.div>
     );
   }
 
@@ -79,22 +83,36 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
   const bgColor = isHighRisk ? 'bg-red-500/10' : 'bg-cyan-500/10';
 
   return (
-    <div className={`rounded-2xl p-6 border ${isHighRisk ? 'border-red-500/50' : 'border-slate-200'} bg-white shadow-sm transition-all duration-500 relative overflow-hidden`}>
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className={`rounded-2xl p-6 border ${isHighRisk ? 'border-red-500/50 shadow-red-500/10' : 'border-cyan-200/50 shadow-cyan-500/10'} bg-white shadow-lg transition-all duration-500 relative overflow-hidden group`}
+    >
       {/* Decorative Background Blob */}
-      <div className={`absolute -right-10 -top-10 w-40 h-40 rounded-full blur-3xl opacity-20 ${bgColor}`} />
+      <motion.div 
+        animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.4, 0.2] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        className={`absolute -right-10 -top-10 w-40 h-40 rounded-full blur-3xl ${bgColor} pointer-events-none`} 
+      />
 
-      <div className="flex  justify-between items-start mb-6">
+      <div className="flex justify-between items-start mb-6">
         <div>
           <h3 className="text-xl font-bold font-display text-slate-800 mb-1">Predictive Radar</h3>
-          <p className="text-sm text-slate-500">{isHighRisk ? 'High warning detected' : 'System nominal'}</p>
+          <p className="text-sm text-slate-500 font-medium">{isHighRisk ? 'High warning detected' : 'System nominal'}</p>
         </div>
-        {isHighRisk ? <AlertTriangle className="w-6 h-6 text-red-500" /> : <ShieldCheck className="w-6 h-6 text-cyan-500" />}
+        <motion.div
+           initial={{ rotate: -180, opacity: 0 }}
+           animate={{ rotate: 0, opacity: 1 }}
+           transition={{ type: "spring", stiffness: 200, damping: 15 }}
+        >
+           {isHighRisk ? <AlertTriangle className="w-6 h-6 text-red-500" /> : <ShieldCheck className="w-6 h-6 text-cyan-500" />}
+        </motion.div>
       </div>
 
       <div className="flex flex-col items-center gap-4 text-center">
 
         {/* SVG Dial */}
-        <div className="relative w-24 h-24 flex-shrink-0">
+        <div className="relative w-24 h-24 flex-shrink-0 group-hover:scale-105 transition-transform duration-500">
           <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
             <path
               className="text-slate-100 stroke-current"
@@ -102,36 +120,50 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
               fill="none"
               d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
             />
-            <path
+            <motion.path
+              initial={{ strokeDasharray: "0, 100" }}
+              animate={{ strokeDasharray: `${flareData.flare_risk_percentage}, 100` }}
+              transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
               className={`${ringColor} stroke-current drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]`}
               strokeWidth="3"
-              strokeDasharray={`${flareData.flare_risk_percentage}, 100`}
               fill="none"
               strokeLinecap="round"
               d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className={`text-2xl font-bold ${ringColor}`}>{flareData.flare_risk_percentage}%</span>
-            <span className="text-[10px] text-slate-500 uppercase tracking-widest mt-1">Risk</span>
+            <motion.span 
+               initial={{ opacity: 0, scale: 0.5 }}
+               animate={{ opacity: 1, scale: 1 }}
+               transition={{ delay: 0.8 }}
+               className={`text-2xl font-black ${ringColor}`}
+            >
+               {flareData.flare_risk_percentage}%
+            </motion.span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Risk</span>
           </div>
         </div>
 
         {/* Prediction Data */}
-        <div className="flex-1">
-          <h4 className="text-lg font-bold text-slate-800 mb-1">
+        <motion.div 
+           initial={{ opacity: 0, y: 10 }}
+           animate={{ opacity: 1, y: 0 }}
+           transition={{ delay: 0.5, duration: 0.5 }}
+           className="flex-1"
+        >
+          <h4 className="text-lg font-black text-slate-800 mb-1">
             Likely {flareData.predicted_symptom}
           </h4>
-          <p className="text-sm text-slate-600 leading-relaxed mb-4">
+          <p className="text-sm text-slate-600 leading-relaxed mb-4 font-medium">
             {flareData.reasoning}
           </p>
-          <div className={`inline-block text-sm px-4 py-2.5 rounded-xl ${isHighRisk ? 'bg-red-50 text-red-800 border border-red-100' : 'bg-cyan-50 text-cyan-800 border border-cyan-100'} font-medium`}>
+          <div className={`inline-block text-sm px-4 py-2.5 rounded-xl ${isHighRisk ? 'bg-red-50 text-red-800 border border-red-100' : 'bg-cyan-50 text-cyan-800 border border-cyan-100'} font-bold shadow-sm`}>
             <strong>Action:</strong> {flareData.preventative_action}
           </div>
-        </div>
+        </motion.div>
 
       </div>
-    </div>
+    </motion.div>
   );
 };
 

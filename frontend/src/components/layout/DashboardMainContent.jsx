@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import ActivityFeed from '../dashboard/ActivityFeed';
 import AegisOverlay from '../dashboard/AegisOverlay';
 import FlarePredictor from '../dashboard/FlarePredictor';
@@ -13,13 +14,36 @@ const DashboardMainContent = () => {
 
   const firstName = user?.name ? user.name.split(' ')[0] : 'there';
 
+  // Animation Variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { staggerChildren: 0.15 } 
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { type: "spring", stiffness: 100, damping: 15 }
+    }
+  };
+
   return (
     <main className="flex-1 overflow-y-auto min-h-full bg-transparent text-slate-800">
       <AegisOverlay />
-      <div className="max-w-7xl mx-auto p-4 md:p-8">
+      <motion.div 
+        className="max-w-7xl mx-auto p-4 md:p-8"
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+      >
 
         {/* Top Header */}
-        <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between">
+        <motion.div variants={itemVariants} className="mb-8 flex flex-col md:flex-row md:items-end justify-between">
           <div>
             <h1 className="text-3xl font-black font-display text-slate-900 tracking-tight mb-2">
               Welcome back, {firstName}!
@@ -33,30 +57,34 @@ const DashboardMainContent = () => {
               Past 7 Days ▼
             </button>
           </div>
-        </div>
+        </motion.div>
 
         {/* B2C Wow Features: Top Row */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
           {/* Left Side: Anatomy Model */}
-          <div className="lg:col-span-7 flex flex-col h-full">
+          <motion.div variants={itemVariants} className="lg:col-span-7 flex flex-col h-full">
             <AnatomySection />
-          </div>
+          </motion.div>
 
           {/* Right Side: Stacked Widgets */}
           <div className="lg:col-span-5 flex flex-col gap-6">
-            <FlarePredictor />
-            <VagalToneWidget />
+            <motion.div variants={itemVariants}>
+              <FlarePredictor />
+            </motion.div>
+            <motion.div variants={itemVariants}>
+              <VagalToneWidget />
+            </motion.div>
           </div>
         </div>
 
         {/* Main Interaction Area */}
         <div className="grid grid-cols-1 gap-6">
-          <div className="flex flex-col gap-6">
+          <motion.div variants={itemVariants} className="flex flex-col gap-6">
             <ActivityFeed />
-          </div>
+          </motion.div>
         </div>
 
-      </div>
+      </motion.div>
     </main>
   );
 };
