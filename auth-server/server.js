@@ -13,6 +13,7 @@ app.use(express.json());
 // ── Routes ────────────────────────────────────────────────────────────────────
 app.use('/api/auth', authRouter);
 app.use('/api/reports', require('./routes/reports').router);
+app.use('/api/messages', require('./routes/messages').router);
 
 app.get('/health', (_, res) => res.json({ status: 'ok', service: 'Auris Auth Server' }));
 

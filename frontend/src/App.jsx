@@ -20,10 +20,11 @@ import { AppointmentsProvider } from './context/AppointmentsContext';
 import { AuthProvider } from './context/AuthContext';
 import { DoctorProvider } from './context/DoctorContext';
 import DoctorPortal from './components/doctor/DoctorPortal';
+import DoctorChat from './components/dashboard/DoctorChat';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 
 // Pages that should show the app shell (sidebar + header)
-const SHELL_PATHS = ['/', '/chat', '/ai-support', '/appointments', '/statistics', '/doctor'];
+const SHELL_PATHS = ['/', '/chat', '/ai-support', '/appointments', '/statistics', '/doctor', '/doctor-chat'];
 
 const AppContent = () => {
   const location = useLocation();
@@ -74,6 +75,7 @@ const AppContent = () => {
                 <Route path="/appointments" element={<ProtectedRoute><AppointmentsPage /></ProtectedRoute>} />
                 <Route path="/statistics"  element={<ProtectedRoute><StatisticsPage /></ProtectedRoute>} />
                 <Route path="/settings"    element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
+                <Route path="/doctor-chat" element={<PatientRoute><DoctorChat /></PatientRoute>} />
                 <Route path="/doctor"      element={<ProtectedRoute><DoctorProvider><DoctorPortal /></DoctorProvider></ProtectedRoute>} />
                 {/* Catch-all → login */}
                 <Route path="*"            element={<Navigate to="/login" replace />} />

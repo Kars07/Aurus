@@ -81,6 +81,17 @@ router.get('/me', authMiddleware, async (req, res) => {
   }
 });
 
+// ── GET /api/auth/doctors ─────────────────────────────────────────────────
+router.get('/doctors', authMiddleware, async (req, res) => {
+  try {
+    const doctors = await User.find({ role: 'doctor' })
+      .select('name email role bioData createdAt');
+    res.json({ doctors });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch doctors.' });
+  }
+});
+
 // ── PUT /api/auth/onboarding ──────────────────────────────────────────────
 router.put('/onboarding', authMiddleware, async (req, res) => {
   try {

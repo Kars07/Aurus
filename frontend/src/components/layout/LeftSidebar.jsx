@@ -43,7 +43,7 @@ const LeftSidebar = ({ onCloseMobileMenu }) => {
     : [
         { icon: MessageCircleMore, label: "Generate Report", path: "/chat" },
         { icon: Bot, label: "AI Support", path: "/ai-support" },
-        { icon: Phone, label: "Contact a Doctoraxa", path: "#" },
+        { icon: Phone, label: "Contact a Doctor", path: "/doctor-chat" },
       ];
 
   return (
@@ -154,18 +154,20 @@ const LeftSidebar = ({ onCloseMobileMenu }) => {
         </Link>
 
         {/* Doctor Portal Entry */}
-        <Link
-          to="/doctor"
-          className={`flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all mt-2 ${
-            currentPath === '/doctor'
-              ? 'bg-[#06b6d4] text-white font-bold'
-              : 'bg-cyan-50 text-[#06b6d4] hover:bg-[#06b6d4] hover:text-white'
-          }`}
-        >
-          <Stethoscope className="w-5 h-5 flex-shrink-0" />
-          <span className="font-bold text-sm">Doctor Portal</span>
-          <span className="ml-auto text-[10px] font-black bg-white/20 border border-current px-1.5 py-0.5 rounded-full">Dr.</span>
-        </Link>
+        {user?.role === 'doctor' && (
+          <Link
+            to="/doctor"
+            className={`flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all mt-2 ${
+              currentPath === '/doctor'
+                ? 'bg-[#06b6d4] text-white font-bold'
+                : 'bg-cyan-50 text-[#06b6d4] hover:bg-[#06b6d4] hover:text-white'
+            }`}
+          >
+            <Stethoscope className="w-5 h-5 flex-shrink-0" />
+            <span className="font-bold text-sm">Doctor Portal</span>
+            <span className="ml-auto text-[10px] font-black bg-white/20 border border-current px-1.5 py-0.5 rounded-full">Dr.</span>
+          </Link>
+        )}
 
         {/* Logout */}
         <button
