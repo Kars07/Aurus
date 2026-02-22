@@ -24,18 +24,27 @@ const LeftSidebar = ({ onCloseMobileMenu }) => {
 
   const handleLogout = () => { logout(); navigate('/login'); };
 
-  const navItemsGeneral = [
-    { icon: LayoutDashboard, label: "Dashboard", path: "/" },
-    { icon: CalendarRange, label: "Calendar", path: "/calendar" },
-    { icon: SquarePlus, label: "Appointments", path: "/appointments" },
-    { icon: ChartNoAxesCombined, label: "Statistics", path: "/statistics" },
-  ];
+  // Different nav items tailored to the user role
+  const navItemsGeneral = user?.role === 'doctor'
+    ? [
+        { icon: CalendarRange, label: "Calendar", path: "/calendar" },
+        { icon: SquarePlus, label: "Appointments", path: "/appointments" },
+        { icon: ChartNoAxesCombined, label: "Statistics", path: "/statistics" },
+      ]
+    : [
+        { icon: LayoutDashboard, label: "Dashboard", path: "/" },
+        { icon: CalendarRange, label: "Calendar", path: "/calendar" },
+        { icon: SquarePlus, label: "Appointments", path: "/appointments" },
+        { icon: ChartNoAxesCombined, label: "Statistics", path: "/statistics" },
+      ];
 
-  const navItemsTools = [
-    { icon: MessageCircleMore, label: "Generate Report", path: "/chat" },
-    { icon: Bot, label: "AI Support", path: "/ai-support" },
-    { icon: Phone, label: "Contact a Doctoraxa", path: "#" },
-  ];
+  const navItemsTools = user?.role === 'doctor' 
+    ? [] // Tools are patient-only in this version
+    : [
+        { icon: MessageCircleMore, label: "Generate Report", path: "/chat" },
+        { icon: Bot, label: "AI Support", path: "/ai-support" },
+        { icon: Phone, label: "Contact a Doctoraxa", path: "#" },
+      ];
 
   return (
     <aside className="bg-[#F6FAFF] w-64 h-screen border-r border-gray-200 p-6 flex flex-col justify-between">
@@ -48,8 +57,8 @@ const LeftSidebar = ({ onCloseMobileMenu }) => {
           </h1>
           {onCloseMobileMenu && (
             <button
-              onClick={onCloseMobileMenu}
-              className="md:hidden p-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"
+               onClick={onCloseMobileMenu}
+               className="md:hidden p-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -99,35 +108,37 @@ const LeftSidebar = ({ onCloseMobileMenu }) => {
           </nav>
         </div>
 
-        {/* Tools Nav */}
-        <div>
-          <p className="text-gray-400 text-sm font-medium mb-4">Tools</p>
-          <nav className="space-y-2">
-            {navItemsTools.map((item, index) => {
-              const isActive = item.path ? currentPath === item.path : false;
-              return item.path ? (
-                <Link
-                  key={index}
-                  to={item.path}
-                  onClick={onCloseMobileMenu}
-                  className={`flex items-center space-x-3 px-3 py-2 rounded-lg hover:text-black hover:font-bold transition-all ${isActive ? "text-black font-bold bg-slate-100" : "text-gray-600"
-                    }`}
-                >
-                  <item.icon className={`w-5 h-5 ${isActive ? "text-black" : ""}`} />
-                  <span className={isActive ? "font-bold" : "font-medium"}>{item.label}</span>
-                </Link>
-              ) : (
-                <div
-                  key={index}
-                  className="flex items-center space-x-3 px-3 py-2 rounded-lg cursor-not-allowed opacity-50 text-gray-600"
-                >
-                  <item.icon className="w-5 h-5" />
-                  <span className="font-medium">{item.label}</span>
-                </div>
-              );
-            })}
-          </nav>
-        </div>
+        {/* Tools Nav (Hidden for doctors) */}
+        {navItemsTools.length > 0 && (
+          <div>
+            <p className="text-gray-400 text-sm font-medium mb-4">Tools</p>
+            <nav className="space-y-2">
+              {navItemsTools.map((item, index) => {
+                const isActive = item.path ? currentPath === item.path : false;
+                return item.path ? (
+                  <Link
+                    key={index}
+                    to={item.path}
+                    onClick={onCloseMobileMenu}
+                    className={`flex items-center space-x-3 px-3 py-2 rounded-lg hover:text-black hover:font-bold transition-all ${isActive ? "text-black font-bold bg-slate-100" : "text-gray-600"
+                      }`}
+                  >
+                    <item.icon className={`w-5 h-5 ${isActive ? "text-black" : ""}`} />
+                    <span className={isActive ? "font-bold" : "font-medium"}>{item.label}</span>
+                  </Link>
+                ) : (
+                  <div
+                    key={index}
+                    className="flex items-center space-x-3 px-3 py-2 rounded-lg cursor-not-allowed opacity-50 text-gray-600"
+                  >
+                    <item.icon className="w-5 h-5" />
+                    <span className="font-medium">{item.label}</span>
+                  </div>
+                );
+              })}
+            </nav>
+          </div>
+        )}
       </div>
 
       {/* Settings */}

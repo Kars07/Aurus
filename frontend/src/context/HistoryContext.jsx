@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useAuth } from './AuthContext';
 
 const HistoryContext = createContext();
 
@@ -6,35 +7,75 @@ export const useHistory = () => useContext(HistoryContext);
 
 export const HistoryProvider = ({ children }) => {
   const [history, setHistory] = useState([]);
+  const { token, isAuthenticated, isPatient } = useAuth();
 
+  // Fetch history from MongoDB
   useEffect(() => {
-    const saved = localStorage.getItem('auris_history');
-    if (saved) {
+    const fetchHistory = async () => {
       try {
-        setHistory(JSON.parse(saved));
-      } catch (e) {
-        console.error("Failed to parse history from localStorage", e);
+        const res = await fetch('http://localhost:3001/api/reports', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setHistory(data.reports);
+        }
+      } catch (err) {
+        console.error("Failed to fetch reports from MongoDB", err);
       }
-    }
-  }, []);
+    };
 
-  const addEntry = (entry) => {
-    const newEntry = {
+    if (isAuthenticated && isPatient && token) {
+      fetchHistory();
+    } else if (!isAuthenticated) {
+      setHistory([]);
+    }
+  }, [token, isAuthenticated, isPatient]);
+
+  const addEntry = async (entry) => {
+    // Optimistic UI update
+    const tempEntry = {
       ...entry,
       id: Date.now().toString(),
       timestamp: new Date().toISOString()
     };
     
-    setHistory(prev => {
-      const updated = [newEntry, ...prev];
-      localStorage.setItem('auris_history', JSON.stringify(updated));
-      return updated;
-    });
+    setHistory(prev => [tempEntry, ...prev]);
+
+    // Save to MongoDB
+    if (isAuthenticated && token) {
+      try {
+        const res = await fetch('http://localhost:3001/api/reports', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+             type: tempEntry.type || 'snapshot',
+             data: tempEntry.data
+          })
+        });
+        
+        if (!res.ok) {
+          throw new Error('Failed to save report to DB');
+        }
+        
+        // Optionally fetch history again to get real Mongo _id
+        const newReport = await res.json();
+        setHistory(prev => prev.map(item => item.id === tempEntry.id ? newReport.report : item));
+
+      } catch (e) {
+        console.error("Failed to POST history to MongoDB", e);
+      }
+    }
   };
 
   const clearHistory = () => {
     setHistory([]);
-    localStorage.removeItem('auris_history');
+    // Not actively deleting from DB for safety, just clearing UI state
   };
 
   return (
