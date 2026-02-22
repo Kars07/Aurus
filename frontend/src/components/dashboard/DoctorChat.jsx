@@ -16,7 +16,7 @@ const DoctorChat = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const res = await fetch('http://localhost:3001/api/auth/doctors', {
+        const res = await fetch('https://auris-w1og.onrender.com/api/auth/doctors', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (res.ok) {
@@ -39,7 +39,7 @@ const DoctorChat = () => {
   const fetchMessages = async (doctorId) => {
     try {
       if (!doctorId) return;
-      const res = await fetch(`http://localhost:3001/api/messages/${doctorId}`, {
+      const res = await fetch(`https://auris-w1og.onrender.com/api/messages/${doctorId}`, {
          headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
@@ -75,7 +75,7 @@ const DoctorChat = () => {
     setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
 
     try {
-      const res = await fetch('http://localhost:3001/api/messages', {
+      const res = await fetch('https://auris-w1og.onrender.com/api/messages', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

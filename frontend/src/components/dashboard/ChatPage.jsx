@@ -24,7 +24,7 @@ const ChatPage = () => {
 Do NOT attempt to pass the history logs into the tool parameters.`;
     
     try {
-      const response = await fetch('/v1/chat/completions', {
+      const response = await fetch('https://auris-1-82up.onrender.com/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

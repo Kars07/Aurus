@@ -10,7 +10,7 @@ export const DoctorProvider = ({ children }) => {
 
   const fetchRealReports = async () => {
     try {
-      const res = await fetch('http://localhost:3001/api/reports', {
+      const res = await fetch('https://auris-w1og.onrender.com/api/reports', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
@@ -28,7 +28,7 @@ export const DoctorProvider = ({ children }) => {
         let messages = [];
         try {
           if (patientUser._id) {
-             const mRes = await fetch(`http://localhost:3001/api/messages/${patientUser._id}`, {
+             const mRes = await fetch(`https://auris-w1og.onrender.com/api/messages/${patientUser._id}`, {
                headers: { 'Authorization': `Bearer ${token}` }
              });
              const mData = await mRes.json();
@@ -96,7 +96,7 @@ export const DoctorProvider = ({ children }) => {
          return;
       }
 
-      const res = await fetch('http://localhost:3001/api/messages', {
+      const res = await fetch('https://auris-w1og.onrender.com/api/messages', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

@@ -13,7 +13,7 @@ export const HistoryProvider = ({ children }) => {
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const res = await fetch('http://localhost:3001/api/reports', {
+        const res = await fetch('https://auris-w1og.onrender.com/api/reports', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -47,7 +47,7 @@ export const HistoryProvider = ({ children }) => {
     // Save to MongoDB
     if (isAuthenticated && token) {
       try {
-        const res = await fetch('http://localhost:3001/api/reports', {
+        const res = await fetch('https://auris-w1og.onrender.com/api/reports', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
