@@ -11,7 +11,7 @@ llms:
     model_name: meta/llama-3.1-70b-instruct
     temperature: 0.0
     max_tokens: 2048
-    api_key: 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
+    api_key: ${nvida_nim}
 
 
 
