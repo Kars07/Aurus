@@ -22,6 +22,8 @@ import { AuthProvider } from './context/AuthContext';
 import { DoctorProvider } from './context/DoctorContext';
 import DoctorPortal from './components/doctor/DoctorPortal';
 import DoctorChat from './components/dashboard/DoctorChat';
+import LandingPage from './components/layout/LandingPage';
+import { useAuth } from './context/AuthContext';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
@@ -32,7 +34,10 @@ const AppContent = () => {
   const location = useLocation();
   const isDashboard = location.pathname === '/';
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const isAuthPage = ['/login', '/signup', '/onboarding'].includes(location.pathname);
+  const { isAuthenticated } = useAuth();
+  
+  // Pages that take over the entire screen (no sidebar/header shell)
+  const isFullScreenPage = ['/login', '/signup', '/onboarding'].includes(location.pathname) || (location.pathname === '/' && !isAuthenticated);
 
   // Track device modal state based on navigation from onboarding
   const [showDeviceModal, setShowDeviceModal] = useState(false);
@@ -53,10 +58,11 @@ const AppContent = () => {
         <DeviceConnectionModal onComplete={() => setShowDeviceModal(false)} />
       )}
 
-      {/* Auth pages: full-screen, no sidebar */}
-      {isAuthPage ? (
+      {/* Full-screen pages: no sidebar, no header wrapper */}
+      {isFullScreenPage ? (
         <div className={`flex-1 overflow-y-auto ${showDeviceModal ? 'blur-md pointer-events-none opacity-50 transition-all' : ''}`}>
           <Routes>
+            <Route path="/" element={<GuestRoute><LandingPage /></GuestRoute>} />
             <Route path="/login" element={<GuestRoute><LoginPage /></GuestRoute>} />
             <Route path="/signup" element={<GuestRoute><SignupPage /></GuestRoute>} />
             <Route path="/onboarding" element={<ProtectedRoute><OnboardingPage /></ProtectedRoute>} />

@@ -13,6 +13,7 @@
     "@tailwindcss/postcss": "^4.1.7",
     "@tailwindcss/vite": "^4.1.7",
     "clsx": "^2.1.1",
+    "framer-motion": "^12.34.3",
     "html2pdf.js": "^0.14.0",
     "lucide-react": "^0.511.0",
     "node": "^22.16.0",
