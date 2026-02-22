@@ -15,11 +15,12 @@ export const ProtectedRoute = ({ children }) => {
   return children;
 };
 
-// Redirect to /onboarding if patient hasn't completed it
+// Redirect to /onboarding if patient hasn't completed it; redirect doctors to /doctor
 export const PatientRoute = ({ children }) => {
-  const { isAuthenticated, loading, user, isPatient } = useAuth();
+  const { isAuthenticated, loading, user, isPatient, isDoctor } = useAuth();
   if (loading) return loading_spinner;
   if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (isDoctor) return <Navigate to="/doctor" replace />;
   if (isPatient && !user?.onboardingComplete) return <Navigate to="/onboarding" replace />;
   return children;
 };
