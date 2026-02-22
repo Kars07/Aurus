@@ -7,14 +7,22 @@ import {
   LayoutDashboard,
   Phone,
   Bot,
-  X
+  X,
+  Stethoscope,
+  LogOut,
+  UserCircle
 } from "lucide-react";
 
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const LeftSidebar = ({ onCloseMobileMenu }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const currentPath = location.pathname;
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => { logout(); navigate('/login'); };
 
   const navItemsGeneral = [
     { icon: LayoutDashboard, label: "Dashboard", path: "/" },
@@ -34,7 +42,7 @@ const LeftSidebar = ({ onCloseMobileMenu }) => {
       {/* Top Section */}
       <div>
         {/* Logo and Mobile Close */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold text-cyan-400">
             Au<span className="text-gray-800">ris.</span>
           </h1>
@@ -47,6 +55,19 @@ const LeftSidebar = ({ onCloseMobileMenu }) => {
             </button>
           )}
         </div>
+
+        {/* User Profile */}
+        {user && (
+          <div className="flex items-center gap-3 mb-6 p-3 bg-indigo-50 rounded-2xl border border-indigo-100">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#3835AC] to-cyan-400 flex items-center justify-center flex-shrink-0">
+              <UserCircle className="w-5 h-5 text-white" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-bold text-slate-800 truncate">{user.name}</p>
+              <p className="text-xs text-indigo-500 font-medium capitalize">{user.role}</p>
+            </div>
+          </div>
+        )}
 
         {/* General Nav */}
         <div className="mb-6">
@@ -110,16 +131,39 @@ const LeftSidebar = ({ onCloseMobileMenu }) => {
       </div>
 
       {/* Settings */}
-      <div className="pt-4">
+      <div className="pt-4 space-y-1">
         <Link
           to="/settings"
           onClick={onCloseMobileMenu}
-          className={`flex items-center space-x-3 px-3 py-2 rounded-lg hover:text-black hover:font-bold transition-all ${currentPath === "/settings" ? "text-black font-bold bg-slate-100" : "text-gray-600"
+          className={`flex items-center space-x-3 px-3 py-2.5 rounded-xl hover:text-black hover:font-bold transition-all ${currentPath === "/settings" ? "text-black font-bold bg-slate-100" : "text-gray-600"
             }`}
         >
           <Settings className={`w-5 h-5 ${currentPath === "/settings" ? "text-black" : ""}`} />
           <span className={currentPath === "/settings" ? "font-bold" : "font-medium"}>Setting</span>
         </Link>
+
+        {/* Doctor Portal Entry */}
+        <Link
+          to="/doctor"
+          className={`flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all mt-2 ${
+            currentPath === '/doctor'
+              ? 'bg-[#3835AC] text-white font-bold'
+              : 'bg-indigo-50 text-[#3835AC] hover:bg-[#3835AC] hover:text-white'
+          }`}
+        >
+          <Stethoscope className="w-5 h-5 flex-shrink-0" />
+          <span className="font-bold text-sm">Doctor Portal</span>
+          <span className="ml-auto text-[10px] font-black bg-white/20 border border-current px-1.5 py-0.5 rounded-full">Dr.</span>
+        </Link>
+
+        {/* Logout */}
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center space-x-3 px-3 py-2.5 rounded-xl mt-2 text-slate-500 hover:bg-red-50 hover:text-red-600 transition-all"
+        >
+          <LogOut className="w-5 h-5 flex-shrink-0" />
+          <span className="font-bold text-sm">Logout</span>
+        </button>
       </div>
     </aside>
   );
