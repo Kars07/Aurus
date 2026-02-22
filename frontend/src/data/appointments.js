@@ -13,7 +13,7 @@ export const upcomingAppointments = [
     time: '14:00 PM',
     day: 'Thursday',
     type: 'review',
-    color: 'bg-[#3835AC]'
+    color: 'bg-[#06b6d4]'
   },
   {
     id: 3,
@@ -21,7 +21,7 @@ export const upcomingAppointments = [
     time: '12:00 PM',
     day: 'Saturday',
     type: 'telehealth',
-    color: 'bg-purple-500'
+    color: 'bg-cyan-500'
   },
   {
     id: 4,
@@ -53,7 +53,7 @@ export const calendarData = {
       title: 'Dr. Evans Review',
       time: '09:00-11:00',
       doctor: 'Dr Cameron Williamson',
-      bgColor: 'bg-[#3835AC]',
+      bgColor: 'bg-[#06b6d4]',
       textColor: 'text-white'
     },
     {

@@ -8,18 +8,18 @@ const RightSidebar = () => {
     <aside className="h-full bg-white border-l border-slate-200 flex flex-col w-full text-slate-800">
       {/* Header section with profile */}
       <div className="px-6 py-4 flex items-center justify-end space-x-4 flex-shrink-0 border-b border-slate-100 mb-4">
-        <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-indigo-200">
+        <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-cyan-200">
           <img src="patient-1.jpg" alt="Profile" className="w-full h-full object-cover" />
         </div>
         <Link to="/appointments" className="w-10 h-10 bg-slate-100 hover:bg-slate-200 rounded-full flex items-center justify-center cursor-pointer transition-colors">
-          <Plus className="w-5 h-5 text-[#3835AC]" />
+          <Plus className="w-5 h-5 text-[#06b6d4]" />
         </Link>
       </div>
 
       <div className="flex-1 overflow-y-auto scrollbar-hide px-5 pb-6">
         <CalendarView />
         <div className="mt-8">
-            <UpcomingSchedule />
+          <UpcomingSchedule />
         </div>
       </div>
     </aside>

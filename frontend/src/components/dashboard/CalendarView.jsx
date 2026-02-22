@@ -3,8 +3,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import clsx from "clsx";
 import { useAppointments } from "../../context/AppointmentsContext";
 
-const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-const DAY_LABELS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const DAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 // Map appointment day strings to JS getDay() offsets (Mon=0 ... Sun=6)
 const DAY_STRING_TO_NUM = {
@@ -16,6 +16,9 @@ const CalendarView = () => {
   const today = new Date();
   const [viewYear, setViewYear] = useState(today.getFullYear());
   const [viewMonth, setViewMonth] = useState(today.getMonth()); // 0-indexed
+  const [selectedDate, setSelectedDate] = useState(today.getDate());
+  const [selectedMonth, setSelectedMonth] = useState(today.getMonth());
+  const [selectedYear, setSelectedYear] = useState(today.getFullYear());
 
   const { appointments } = useAppointments();
 
@@ -56,15 +59,41 @@ const CalendarView = () => {
         if (dow < 0) dow = 6;
         if (dow === dayNum) {
           if (!map[d]) map[d] = [];
-          map[d].push(app.time);
+          map[d].push(app);
         }
       }
     });
     return map;
   }, [appointments, viewYear, viewMonth]);
 
+  // Use a second map for the selected month to ensure we can show selected date's appointments
+  // even if it's different from the currently viewed month, but here we'll just show appointments
+  // if the selected date matches the view month/year, or we can compute appointments for the selected date on the fly.
+  const selectedDateAppointments = useMemo(() => {
+    const apps = [];
+    if (!selectedDate) return apps;
+    const dateObj = new Date(selectedYear, selectedMonth, selectedDate);
+    let dow = dateObj.getDay() - 1;
+    if (dow < 0) dow = 6;
+
+    appointments.forEach(app => {
+      const dayNum = DAY_STRING_TO_NUM[app.day];
+      if (dayNum === dow) {
+        apps.push(app);
+      }
+    });
+    return apps;
+  }, [appointments, selectedYear, selectedMonth, selectedDate]);
+
   const todayDate = today.getDate();
   const isCurrentMonth = viewYear === today.getFullYear() && viewMonth === today.getMonth();
+
+  const handleDateClick = (date) => {
+    if (!date) return;
+    setSelectedDate(date);
+    setSelectedMonth(viewMonth);
+    setSelectedYear(viewYear);
+  };
 
   return (
     <div className="bg-[#F6FAFF] rounded-2xl p-6">
@@ -96,17 +125,20 @@ const CalendarView = () => {
       <div className="grid grid-cols-7 gap-1">
         {calendarDates.map((date, index) => {
           const isToday = isCurrentMonth && date === todayDate;
-          const hasAppointments = date && appointmentsByDate[date];
+          const isSelected = date === selectedDate && viewMonth === selectedMonth && viewYear === selectedYear;
+          const hasAppointments = date && appointmentsByDate[date] && appointmentsByDate[date].length > 0;
 
           return (
             <div
               key={index}
+              onClick={() => handleDateClick(date)}
               className={clsx(
                 "relative text-center py-2 rounded-xl transition-colors min-h-[2.5rem] flex flex-col items-center justify-start",
                 !date && "opacity-0",
-                date && "cursor-default",
-                isToday && "bg-cyan-500 text-white font-bold shadow-sm",
-                !isToday && date && "text-gray-700 hover:bg-gray-100"
+                date && "cursor-pointer",
+                isSelected ? "bg-cyan-500 text-white font-bold shadow-sm" :
+                  isToday ? "bg-slate-200 text-slate-800 font-bold" :
+                    date ? "text-gray-700 hover:bg-gray-100" : ""
               )}
             >
               {date && (
@@ -117,7 +149,7 @@ const CalendarView = () => {
                       {appointmentsByDate[date].slice(0, 3).map((_, i) => (
                         <div key={i} className={clsx(
                           "w-1.5 h-1.5 rounded-full",
-                          isToday ? "bg-white" : "bg-[#3835AC]"
+                          isSelected ? "bg-white" : "bg-[#06b6d4]"
                         )} />
                       ))}
                     </div>
@@ -129,19 +161,37 @@ const CalendarView = () => {
         })}
       </div>
 
-      {/* Upcoming today */}
-      {isCurrentMonth && appointmentsByDate[todayDate] && (
-        <div className="mt-6 pt-4 border-t border-slate-200">
-          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Today's Slots</p>
-          <div className="flex flex-wrap gap-2">
-            {appointmentsByDate[todayDate].map((time, i) => (
-              <span key={i} className="text-xs px-3 py-1.5 rounded-full bg-cyan-500 text-white font-semibold">
-                {time}
-              </span>
+      {/* Selected Date Appointments */}
+      <div className="mt-6 pt-4 border-t border-slate-200">
+        <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">
+          Appointments for {MONTH_NAMES[selectedMonth]} {selectedDate}, {selectedYear}
+        </p>
+
+        {selectedDateAppointments.length > 0 ? (
+          <div className="space-y-3 max-h-64 overflow-y-auto pr-1">
+            {selectedDateAppointments.map((app, i) => (
+              <div key={i} className="bg-white p-3 rounded-xl border border-slate-100 shadow-sm flex items-start gap-3">
+                <div className={clsx("w-2 h-full min-h-[40px] rounded-full shrink-0", app.color || "bg-cyan-500")} />
+                <div>
+                  <h4 className="text-sm font-bold text-slate-800">{app.title}</h4>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-600">
+                      {app.time}
+                    </span>
+                    <span className="text-xs font-medium text-slate-500 capitalize">
+                      {app.type}
+                    </span>
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="text-center py-6">
+            <p className="text-sm font-medium text-slate-400">No appointments scheduled.</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

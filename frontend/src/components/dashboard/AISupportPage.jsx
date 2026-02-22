@@ -32,17 +32,17 @@ const AISupportPage = () => {
     
     if (item.type === 'snapshot') {
       return (
-        <div key={item.id} className="bg-indigo-50 p-4 rounded-xl shadow-sm border border-indigo-100 mb-3 animate-in fade-in slide-in-from-right-2">
+        <div key={item.id} className="bg-cyan-50 p-4 rounded-xl shadow-sm border border-cyan-100 mb-3 animate-in fade-in slide-in-from-right-2">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
-              <ShieldAlert className="w-4 h-4 text-indigo-400" />
-              <span className="text-xs font-bold text-indigo-400 uppercase tracking-wider">Advocate Brief</span>
+              <ShieldAlert className="w-4 h-4 text-cyan-400" />
+              <span className="text-xs font-bold text-cyan-400 uppercase tracking-wider">Advocate Brief</span>
             </div>
             <span className="text-xs font-semibold text-slate-500">{time}</span>
           </div>
-          <p className="text-sm text-slate-300 font-medium mb-2">{item.data?.advocate_brief || "Brief unavailable."}</p>
+          <p className="text-sm text-slate-500 font-medium mb-2">{item.data?.advocate_brief || "Brief unavailable."}</p>
           {item.data?.demanded_tests?.length > 0 && (
-            <div className="flex items-center gap-1.5 text-xs text-rose-300 font-semibold bg-rose-900/30 px-2 py-1 rounded w-fit">
+            <div className="flex items-center gap-1.5 text-xs text-rose-100 font-semibold bg-rose-700 px-2 py-1 rounded w-fit">
               <AlertCircle className="w-3 h-3" />
               {item.data.demanded_tests.length} Tests Demanded
             </div>
@@ -82,7 +82,7 @@ const AISupportPage = () => {
             <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col h-full max-h-[80vh]">
               <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
                 <div className="flex items-center gap-2">
-                  <Clock className="w-5 h-5 text-[#3835AC]" />
+                  <Clock className="w-5 h-5 text-[#06b6d4]" />
                   <h3 className="font-bold text-slate-800 text-lg">Today's Timeline</h3>
                 </div>
                 {history.length > 0 && (

@@ -23,8 +23,8 @@ const AppointmentsPage = () => {
 
   const colorMap = {
     checkup: 'bg-cyan-500',
-    specialist: 'bg-purple-500',
-    review: 'bg-[#3835AC]',
+    specialist: 'bg-cyan-500',
+    review: 'bg-[#06b6d4]',
     telehealth: 'bg-amber-500',
   };
 
@@ -66,7 +66,7 @@ const AppointmentsPage = () => {
           </div>
           <button 
             onClick={() => setIsAdding(!isAdding)}
-            className="hidden md:flex flex-row gap-2 text-sm font-bold text-white transition-colors bg-[#3835AC] hover:bg-indigo-800 px-5 py-3 rounded-xl items-center shadow-sm"
+            className="hidden md:flex flex-row gap-2 text-sm font-bold text-white transition-colors bg-[#06b6d4] hover:bg-cyan-800 px-5 py-3 rounded-xl items-center shadow-sm"
           >
             <Plus className="w-4 h-4" />
             {isAdding ? 'Cancel' : 'New Appointment'}
@@ -125,7 +125,7 @@ const AppointmentsPage = () => {
                                 value={type}
                                 checked={formData.type === type}
                                 onChange={(e) => setFormData({...formData, type: e.target.value})}
-                                className="text-[#3835AC] focus:ring-[#3835AC]" 
+                                className="text-[#06b6d4] focus:ring-[#06b6d4]" 
                               />
                               <span className="text-sm text-slate-700 capitalize">{type}</span>
                             </label>
@@ -134,7 +134,7 @@ const AppointmentsPage = () => {
                     </div>
                     <div className="pt-4 flex justify-end gap-3">
                       <button type="button" onClick={() => setIsAdding(false)} className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-xl font-medium transition-colors">Cancel</button>
-                      <button type="submit" className="px-6 py-2 bg-[#3835AC] text-white rounded-xl font-bold hover:bg-indigo-800 transition-colors shadow-sm">Save Appointment</button>
+                      <button type="submit" className="px-6 py-2 bg-[#06b6d4] text-white rounded-xl font-bold hover:bg-cyan-800 transition-colors shadow-sm">Save Appointment</button>
                     </div>
                  </form>
                </div>

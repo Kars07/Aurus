@@ -68,7 +68,7 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
   return (
     <div className="rounded-2xl p-6 bg-white border border-slate-200 shadow-sm overflow-hidden relative">
       <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
-        <Sparkles className="w-24 h-24 text-indigo-400" />
+        <Sparkles className="w-24 h-24 text-cyan-400" />
       </div>
 
       <div className="mb-6 relative z-10">
@@ -83,12 +83,12 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="e.g. 'Why did I feel so stiff on Thursday?'"
-            className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl py-3 pl-4 pr-12 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors"
+            className="w-full bg-slate-50 border border-slate-200 text-slate-800 rounded-xl py-3 pl-4 pr-12 focus:outline-none focus:border-cyan-600 focus:ring-1 focus:ring-cyan-600 transition-colors"
           />
           <button
             type="submit"
             disabled={isSearching}
-            className="absolute right-2 top-2 p-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg transition-colors disabled:opacity-50"
+            className="absolute right-2 top-2 p-1.5 bg-cyan-50 text-cyan-600 hover:bg-cyan-100 rounded-lg transition-colors disabled:opacity-50"
           >
             {isSearching ? <Loader2 className="w-5 h-5 animate-spin" /> : <Search className="w-5 h-5" />}
           </button>
@@ -97,10 +97,10 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
 
       {/* Results Area */}
       {result && (
-        <div className="mt-4 p-4 rounded-xl bg-indigo-50 border border-indigo-100 relative z-10 animate-fade-in-up">
+        <div className="mt-4 p-4 rounded-xl bg-cyan-50 border border-cyan-100 relative z-10 animate-fade-in-up">
           <div className="flex items-center space-x-2 mb-2">
-            <AlertCircle className="w-4 h-4 text-indigo-600" />
-            <h4 className="text-sm font-bold text-indigo-800 uppercase tracking-widest">
+            <AlertCircle className="w-4 h-4 text-cyan-600" />
+            <h4 className="text-sm font-bold text-cyan-800 uppercase tracking-widest">
               Pattern Found: {result.detected_pattern}
             </h4>
           </div>

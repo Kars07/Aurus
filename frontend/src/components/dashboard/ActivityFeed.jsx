@@ -12,12 +12,12 @@ const ActivityFeed = () => {
       </div>
       
       {/* Line Chart using Recharts */}
-      <div className="flex-1 w-full min-h-[200px]">
+      <div className="flex-1 w-full min-h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={activityData} margin={{ top: 10, right: 30, left: -20, bottom: 0 }}>
+          <LineChart data={activityData} margin={{ top: 20, right: 20, left: 0, bottom: 10 }}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
-            <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{fill: '#6B7280', fontSize: 12}} />
-            <YAxis axisLine={false} tickLine={false} tick={{fill: '#6B7280', fontSize: 12}} />
+            <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{fill: '#6B7280', fontSize: 12}} tickMargin={10} />
+            <YAxis axisLine={false} tickLine={false} tick={{fill: '#6B7280', fontSize: 12}} tickMargin={10} />
             <Tooltip contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
             <Legend verticalAlign="top" height={36} iconType="circle" wrapperStyle={{ fontSize: '12px', color: '#6B7280' }} />
             <Line type="monotone" name="Stress Index" dataKey="stress" stroke="#06b6d4" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />

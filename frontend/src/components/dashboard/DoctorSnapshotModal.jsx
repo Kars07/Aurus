@@ -28,44 +28,44 @@ const DoctorSnapshotModal = ({ isOpen, onClose }) => {
 
   const fetchClinicalData = async () => {
     setLoading(true);
-    
+
     // Format history logs
     const journalLogs = history
       .filter(h => h.type === 'journal')
       .slice(0, 10) // Limit to recent 10 to avoid token limits
       .map(h => `[${new Date(h.timestamp).toLocaleString()}] Transcript: "${h.transcript}" | Nudge Delivered: "${h.nudge}"`)
       .join('\n');
-      
+
     const systemPrompt = `You are generating a clinical snapshot. Here are the patient's recent history logs:\n${journalLogs}\n\nYou MUST call the 'auris_reasoning' tool with these exact parameters:
 - mode: "snapshot"
 
 Do NOT attempt to pass the history logs into the tool call parameters.`;
-    
+
     try {
       const response = await fetch('/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           messages: [{ role: 'user', content: systemPrompt }],
           model: 'nvidia/nemotron',
           temperature: 0.1,
           stream: false
         }),
       });
-      
+
       const responseData = await response.json();
       let content = responseData.choices[0].message.content;
-      
+
       // Highly robust JSON extractor to strip out "Thought:", "Final Answer:", and Markdown wrappers
       const firstBrace = content.indexOf('{');
       const lastBrace = content.lastIndexOf('}');
-      
+
       if (firstBrace !== -1 && lastBrace !== -1) {
         content = content.substring(firstBrace, lastBrace + 1);
       } else {
         throw new Error("No JSON object found in the LLM response.");
       }
-      
+
       const payload = JSON.parse(content);
       setData(payload);
       addEntry({
@@ -107,16 +107,16 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
     // Dynamic import to avoid SSR issues if this was a Next.js app, but also good for bundle splitting
     const html2pdf = (await import('html2pdf.js')).default;
     const element = document.getElementById('doctor-snapshot-content');
-    
+
     // Temporarily hide the close/download buttons during export if they were inside the snapshot block
     const opt = {
-      margin:       0.5,
-      filename:     `Clinical_Snapshot_${data?.report_date || 'latest'}.pdf`,
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2 },
-      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      margin: 0.5,
+      filename: `Clinical_Snapshot_${data?.report_date || 'latest'}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
     };
-    
+
     html2pdf().set(opt).from(element).save();
   };
 
@@ -125,9 +125,9 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
       <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-gray-200">
-        
+
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 bg-[#3835AC] text-white">
+        <div className="flex items-center justify-between px-6 py-4 bg-[#06b6d4] text-white">
           <div className="flex items-center gap-3">
             <div className="bg-white/20 p-2 rounded-lg">
               <FileText className="w-6 h-6 text-white" />
@@ -138,7 +138,7 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <button 
+            <button
               onClick={handleDownloadPDF}
               className="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition-colors text-sm font-medium"
             >
@@ -152,10 +152,10 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
 
         {/* Content */}
         <div id="doctor-snapshot-content" className="flex-1 overflow-y-auto p-6 bg-gray-50 flex flex-col gap-6 relative">
-          
+
           {loading && (
             <div className="absolute inset-0 z-10 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center space-y-4 rounded-b-2xl">
-              <Loader2 className="w-12 h-12 text-[#3835AC] animate-spin" />
+              <Loader2 className="w-12 h-12 text-[#06b6d4] animate-spin" />
               <p className="text-lg font-bold text-gray-800 tracking-tight animate-pulse">NAT Agent synthesizing clinical data...</p>
             </div>
           )}
@@ -173,25 +173,25 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            
+
             {/* Left Column: Trend & Stats */}
             <div className="flex flex-col gap-6">
-              
+
               {/* Graphical Trend */}
               <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
                 <div className="flex items-center gap-2 mb-4">
                   <Activity className="w-5 h-5 text-cyan-600" />
                   <h4 className="font-bold text-gray-800">7-Day Biomarker Trend</h4>
                 </div>
-                <div className="h-48 w-full">
+                <div className="h-64 w-full mt-2">
                   <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={mockTrendData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+                    <LineChart data={mockTrendData} margin={{ top: 10, right: 20, bottom: 10, left: 0 }}>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
-                      <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{fill: '#6B7280', fontSize: 12}} />
-                      <YAxis axisLine={false} tickLine={false} tick={{fill: '#6B7280', fontSize: 12}} />
+                      <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#6B7280', fontSize: 12 }} tickMargin={10} />
+                      <YAxis axisLine={false} tickLine={false} tick={{ fill: '#6B7280', fontSize: 12 }} tickMargin={10} />
                       <Tooltip contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
-                      <Line type="monotone" name="Stress Index" dataKey="stress" stroke="#06b6d4" strokeWidth={3} dot={{r: 4, strokeWidth: 2}} activeDot={{r: 6}} />
-                      <Line type="monotone" name="Pain Level" dataKey="pain" stroke="#f59e0b" strokeWidth={3} dot={{r: 4, strokeWidth: 2}} />
+                      <Line type="monotone" name="Stress Index" dataKey="stress" stroke="#06b6d4" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
+                      <Line type="monotone" name="Pain Level" dataKey="pain" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -204,7 +204,7 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
               {/* Advanced Clinical Synthesis Summary */}
               <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
                 <h4 className="font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-[#3835AC]" /> Clinical Assessment & Plan
+                  <FileText className="w-4 h-4 text-[#06b6d4]" /> Clinical Assessment & Plan
                 </h4>
                 {data?.patient_status ? (
                   <div className="space-y-4">
@@ -217,7 +217,7 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
                       <p className="text-gray-800 text-sm leading-relaxed bg-gray-50 p-2 rounded border border-gray-100">{data.patient_status.objective}</p>
                     </div>
                     <div>
-                      <h5 className="text-sm font-bold text-[#3835AC] uppercase tracking-wider mb-1">Assessment</h5>
+                      <h5 className="text-sm font-bold text-[#06b6d4] uppercase tracking-wider mb-1">Assessment</h5>
                       <p className="text-gray-800 text-sm leading-relaxed font-medium">{data.patient_status.assessment}</p>
                     </div>
                     <div>
@@ -233,7 +233,7 @@ Do NOT attempt to pass the history logs into the tool call parameters.`;
 
             {/* Right Column: Flags & Actions */}
             <div className="flex flex-col gap-6">
-              
+
               {/* Clinical Prevention Flags */}
               <div className="bg-white p-5 rounded-xl border border-red-100 shadow-sm relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-1 h-full bg-red-500"></div>

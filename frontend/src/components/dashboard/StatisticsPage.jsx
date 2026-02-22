@@ -25,7 +25,7 @@ const GaugeCard = ({ label, value, max, unit, color, danger, warning }) => {
   const trackX2 = cx + r * Math.cos(2 * Math.PI);
   const trackY2 = cy + r * Math.sin(2 * Math.PI);
 
-  const isDanger  = value >= danger;
+  const isDanger = value >= danger;
   const isWarning = !isDanger && value >= warning;
   const activeColor = isDanger ? '#ef4444' : isWarning ? '#f59e0b' : color;
 
@@ -73,7 +73,7 @@ const weeklyData = [
 const activityPieData = [
   { name: 'Walking', value: 38, color: '#06b6d4' },
   { name: 'Rest', value: 30, color: '#8b5cf6' },
-  { name: 'Exercise', value: 18, color: '#3835AC' },
+  { name: 'Exercise', value: 18, color: '#06b6d4' },
   { name: 'Sleep', value: 14, color: '#f59e0b' },
 ];
 
@@ -103,9 +103,9 @@ const StatisticsPage = () => {
 
   const metricConfig = {
     heartRate: { label: 'Heart Rate', color: '#ef4444', unit: 'BPM' },
-    pulse:     { label: 'Pulse Rate', color: '#06b6d4', unit: 'BPM' },
-    steps:     { label: 'Walking Steps', color: '#10b981', unit: 'Steps' },
-    bp:        { label: 'Blood Pressure', color: '#8b5cf6', unit: 'mmHg' },
+    pulse: { label: 'Pulse Rate', color: '#06b6d4', unit: 'BPM' },
+    steps: { label: 'Walking Steps', color: '#10b981', unit: 'Steps' },
+    bp: { label: 'Blood Pressure', color: '#8b5cf6', unit: 'mmHg' },
   };
 
   return (
@@ -114,8 +114,8 @@ const StatisticsPage = () => {
 
         {/* Header */}
         <div className="flex items-center space-x-4 mb-8 pb-4 border-b border-slate-200">
-          <div className="p-3 bg-indigo-50 rounded-xl">
-            <BarChart2 className="w-8 h-8 text-[#3835AC]" />
+          <div className="p-3 bg-cyan-50 rounded-xl">
+            <BarChart2 className="w-8 h-8 text-[#06b6d4]" />
           </div>
           <div>
             <h1 className="text-3xl font-black font-display text-slate-900 tracking-tight mb-1">Health Statistics</h1>
@@ -126,7 +126,7 @@ const StatisticsPage = () => {
         {/* Gauges Row */}
         <section className="mb-10">
           <h2 className="text-lg font-bold text-slate-700 mb-4 flex items-center gap-2">
-            <Gauge className="w-5 h-5 text-[#3835AC]" /> Live Gauge Analysis
+            <Gauge className="w-5 h-5 text-[#06b6d4]" /> Live Gauge Analysis
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {gauges.map(g => <GaugeCard key={g.label} {...g} />)}
@@ -140,7 +140,7 @@ const StatisticsPage = () => {
           <section className="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold text-slate-700 flex items-center gap-2">
-                <Activity className="w-5 h-5 text-[#3835AC]" /> Weekly Trend
+                <Activity className="w-5 h-5 text-[#06b6d4]" /> Weekly Trend
               </h2>
               {/* Metric toggles */}
               <div className="flex gap-2 flex-wrap">
@@ -148,9 +148,8 @@ const StatisticsPage = () => {
                   <button
                     key={key}
                     onClick={() => setActiveMetric(key)}
-                    className={`text-xs font-bold px-3 py-1.5 rounded-full transition-all ${
-                      activeMetric === key ? 'text-white shadow-sm' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                    }`}
+                    className={`text-xs font-bold px-3 py-1.5 rounded-full transition-all ${activeMetric === key ? 'text-white shadow-sm' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      }`}
                     style={activeMetric === key ? { backgroundColor: cfg.color } : {}}
                   >
                     {cfg.label}
@@ -158,11 +157,11 @@ const StatisticsPage = () => {
                 ))}
               </div>
             </div>
-            <ResponsiveContainer width="100%" height={220}>
-              <LineChart data={weeklyData} margin={{ top: 5, right: 10, bottom: 5, left: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                <XAxis dataKey="day" tick={{ fontSize: 12, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 12, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
+            <ResponsiveContainer width="100%" height={320}>
+              <LineChart data={weeklyData} margin={{ top: 20, right: 20, bottom: 10, left: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                <XAxis dataKey="day" tick={{ fontSize: 12, fill: '#94a3b8' }} axisLine={false} tickLine={false} tickMargin={10} />
+                <YAxis tick={{ fontSize: 12, fill: '#94a3b8' }} axisLine={false} tickLine={false} tickMargin={10} />
                 <Tooltip
                   contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 24px rgba(0,0,0,0.1)' }}
                   formatter={(val) => [`${val} ${metricConfig[activeMetric].unit}`, metricConfig[activeMetric].label]}
@@ -224,9 +223,9 @@ const StatisticsPage = () => {
               outerRadius="90%"
               data={[
                 { name: 'Steps Goal', value: 82, fill: '#10b981' },
-                { name: 'Heart Rate',  value: 65, fill: '#ef4444' },
-                { name: 'BP Target',   value: 74, fill: '#8b5cf6' },
-                { name: 'Pulse',       value: 90, fill: '#06b6d4' },
+                { name: 'Heart Rate', value: 65, fill: '#ef4444' },
+                { name: 'BP Target', value: 74, fill: '#8b5cf6' },
+                { name: 'Pulse', value: 90, fill: '#06b6d4' },
               ]}
               startAngle={180}
               endAngle={0}

@@ -21,7 +21,7 @@ const DashboardMainContent = () => {
             <p className="text-cyan-400  font-medium tracking-wide uppercase text-sm">Auris Continuous Telemetry Active</p>
           </div>
           <div className="flex gap-3 mt-4 md:mt-0">
-            <button className="hidden md:block text-sm font-bold text-cyan-400 hover:text-cyan-500 transition-colors bg-[#3835AC]/10 px-4 py-2 rounded-xl">
+            <button className="hidden md:block text-sm font-bold text-cyan-400 hover:text-cyan-500 transition-colors bg-[#06b6d4]/10 px-4 py-2 rounded-xl">
               Past 7 Days ▼
             </button>
           </div>

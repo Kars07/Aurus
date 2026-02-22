@@ -8,7 +8,7 @@ const iconMap = {
   telehealth: Video,
 };
 
-const SimpleAppointmentCard = ({ title, time, type, color = "bg-indigo-600" }) => {
+const SimpleAppointmentCard = ({ title, time, type, color = "bg-cyan-600" }) => {
   const Icon = iconMap[type] || Activity;
 
   return (

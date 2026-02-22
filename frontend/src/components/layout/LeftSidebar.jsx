@@ -6,18 +6,19 @@ import {
   Settings,
   LayoutDashboard,
   Phone,
-  Bot
+  Bot,
+  X
 } from "lucide-react";
 
 import { Link, useLocation } from "react-router-dom";
 
-const LeftSidebar = () => {
+const LeftSidebar = ({ onCloseMobileMenu }) => {
   const location = useLocation();
   const currentPath = location.pathname;
 
   const navItemsGeneral = [
     { icon: LayoutDashboard, label: "Dashboard", path: "/" },
-    { icon: CalendarRange, label: "Calendar", path: "/" },
+    { icon: CalendarRange, label: "Calendar", path: "/calendar" },
     { icon: SquarePlus, label: "Appointments", path: "/appointments" },
     { icon: ChartNoAxesCombined, label: "Statistics", path: "/statistics" },
   ];
@@ -32,10 +33,20 @@ const LeftSidebar = () => {
     <aside className="bg-[#F6FAFF] w-64 h-screen border-r border-gray-200 p-6 flex flex-col justify-between">
       {/* Top Section */}
       <div>
-        {/* Logo */}
-        <h1 className="text-2xl font-bold text-cyan-400 mb-8">
-          Au<span className="text-gray-800">ris.</span>
-        </h1>
+        {/* Logo and Mobile Close */}
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-2xl font-bold text-cyan-400">
+            Au<span className="text-gray-800">ris.</span>
+          </h1>
+          {onCloseMobileMenu && (
+            <button
+              onClick={onCloseMobileMenu}
+              className="md:hidden p-2 text-gray-500 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          )}
+        </div>
 
         {/* General Nav */}
         <div className="mb-6">
@@ -47,9 +58,9 @@ const LeftSidebar = () => {
                 <Link
                   key={index}
                   to={item.path}
-                  className={`flex items-center space-x-3 px-3 py-2 rounded-lg hover:text-black hover:font-bold transition-all ${
-                    isActive ? "text-black font-bold bg-slate-100" : "text-gray-600"
-                  }`}
+                  onClick={onCloseMobileMenu}
+                  className={`flex items-center space-x-3 px-3 py-2 rounded-lg hover:text-black hover:font-bold transition-all ${isActive ? "text-black font-bold bg-slate-100" : "text-gray-600"
+                    }`}
                 >
                   <item.icon className={`w-5 h-5 ${isActive ? "text-black" : ""}`} />
                   <span className={isActive ? "font-bold" : "font-medium"}>{item.label}</span>
@@ -77,9 +88,9 @@ const LeftSidebar = () => {
                 <Link
                   key={index}
                   to={item.path}
-                  className={`flex items-center space-x-3 px-3 py-2 rounded-lg hover:text-black hover:font-bold transition-all ${
-                    isActive ? "text-black font-bold bg-slate-100" : "text-gray-600"
-                  }`}
+                  onClick={onCloseMobileMenu}
+                  className={`flex items-center space-x-3 px-3 py-2 rounded-lg hover:text-black hover:font-bold transition-all ${isActive ? "text-black font-bold bg-slate-100" : "text-gray-600"
+                    }`}
                 >
                   <item.icon className={`w-5 h-5 ${isActive ? "text-black" : ""}`} />
                   <span className={isActive ? "font-bold" : "font-medium"}>{item.label}</span>
@@ -100,10 +111,15 @@ const LeftSidebar = () => {
 
       {/* Settings */}
       <div className="pt-4">
-        <div className="flex items-center space-x-3 px-3 py-2 rounded-lg cursor-pointer text-gray-600 hover:text-black hover:font-bold">
-          <Settings className="w-5 h-5" />
-          <span className="font-medium">Setting</span>
-        </div>
+        <Link
+          to="/settings"
+          onClick={onCloseMobileMenu}
+          className={`flex items-center space-x-3 px-3 py-2 rounded-lg hover:text-black hover:font-bold transition-all ${currentPath === "/settings" ? "text-black font-bold bg-slate-100" : "text-gray-600"
+            }`}
+        >
+          <Settings className={`w-5 h-5 ${currentPath === "/settings" ? "text-black" : ""}`} />
+          <span className={currentPath === "/settings" ? "font-bold" : "font-medium"}>Setting</span>
+        </Link>
       </div>
     </aside>
   );

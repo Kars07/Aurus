@@ -176,7 +176,7 @@ const JournalingInput = () => {
             w-40 h-40 rounded-full flex flex-col items-center justify-center shadow-xl transition-all duration-300
             ${isRecording 
               ? 'bg-red-50 text-red-600 scale-95 border-4 border-red-200 animate-pulse' 
-              : 'bg-gradient-to-br from-cyan-400 to-[#3835AC] text-white hover:scale-105 hover:shadow-cyan-200/50'
+              : 'bg-gradient-to-br from-cyan-400 to-[#06b6d4] text-white hover:scale-105 hover:shadow-cyan-200/50'
             }
             focus:outline-none focus:ring-4 focus:ring-cyan-300 focus:ring-offset-4
           `}

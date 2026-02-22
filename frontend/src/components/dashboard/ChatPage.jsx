@@ -97,8 +97,8 @@ Do NOT attempt to pass the history logs into the tool parameters.`;
         {/* Header */}
         <div className="flex justify-between items-center mb-8 pb-4 border-b border-slate-200">
           <div className="flex items-center space-x-4">
-            <div className="p-3 bg-indigo-50 rounded-xl">
-              <Shield className="w-8 h-8 text-indigo-600" />
+            <div className="p-3 bg-cyan-50 rounded-xl">
+              <Shield className="w-8 h-8 text-cyan-600" />
             </div>
             <div>
               <h1 className="text-3xl font-black font-display text-slate-900 tracking-tight mb-1">Advocate AI Chat</h1>
@@ -112,7 +112,7 @@ Do NOT attempt to pass the history logs into the tool parameters.`;
           <button
             onClick={fetchAdvocateBrief}
             disabled={loading}
-            className="flex-1 py-4 px-6 bg-[#3835AC] hover:bg-indigo-800 text-white font-bold rounded-xl shadow-md transition-all flex items-center justify-center disabled:opacity-50"
+            className="flex-1 py-4 px-6 bg-[#06b6d4] hover:bg-cyan-800 text-white font-bold rounded-xl shadow-md transition-all flex items-center justify-center disabled:opacity-50"
           >
             {loading ? <Activity className="w-5 h-5 mr-3 animate-spin" /> : <Shield className="w-5 h-5 mr-3" />}
             {loading ? 'Synthesizing Argument...' : 'Generate New Brief'}
@@ -139,8 +139,8 @@ Do NOT attempt to pass the history logs into the tool parameters.`;
           ) : data ? (
             <div className="p-8 md:p-12 space-y-8 text-slate-900 bg-white">
               
-              <div className="border-b-4 border-indigo-900 pb-4 mb-8">
-                <h1 className="text-4xl font-black uppercase text-indigo-900 mb-2">Patient Advocate Brief</h1>
+              <div className="border-b-4 border-cyan-900 pb-4 mb-8">
+                <h1 className="text-4xl font-black uppercase text-cyan-900 mb-2">Patient Advocate Brief</h1>
                 <div className="flex justify-between text-sm font-bold text-slate-500">
                   <span>SYSTEM: Auris Telemetry Check</span>
                   <span>DATE: {new Date().toLocaleDateString()}</span>
@@ -148,7 +148,7 @@ Do NOT attempt to pass the history logs into the tool parameters.`;
               </div>
 
               <div>
-                <h3 className="text-xl font-bold text-indigo-900 uppercase tracking-widest mb-4 border-b-2 border-indigo-100 pb-2">Data-Backed Synthesis</h3>
+                <h3 className="text-xl font-bold text-cyan-900 uppercase tracking-widest mb-4 border-b-2 border-cyan-100 pb-2">Data-Backed Synthesis</h3>
                 <p className="text-slate-700 leading-relaxed font-serif text-xl">
                   {data.advocate_brief}
                 </p>
@@ -169,16 +169,16 @@ Do NOT attempt to pass the history logs into the tool parameters.`;
                   </ul>
                 </div>
 
-                <div className="bg-indigo-50 rounded-2xl p-8 border border-indigo-200 shadow-sm">
-                  <h3 className="text-indigo-900 font-bold uppercase tracking-widest mb-6 flex items-center">
+                <div className="bg-cyan-50 rounded-2xl p-8 border border-cyan-200 shadow-sm">
+                  <h3 className="text-cyan-900 font-bold uppercase tracking-widest mb-6 flex items-center">
                     <Shield className="w-6 h-6 mr-3" /> Exact Script to Read
                   </h3>
                   <div className="relative h-full">
-                    <span className="absolute -top-4 -left-2 text-7xl text-indigo-200 font-serif leading-none">"</span>
-                    <p className="text-indigo-950 font-medium italic relative z-10 pt-4 pb-2 pl-6 text-xl">
+                    <span className="absolute -top-4 -left-2 text-7xl text-cyan-200 font-serif leading-none">"</span>
+                    <p className="text-cyan-950 font-medium italic relative z-10 pt-4 pb-2 pl-6 text-xl">
                       {data.script}
                     </p>
-                    <span className="absolute bottom-0 right-2 text-7xl text-indigo-200 font-serif leading-none rotate-180">"</span>
+                    <span className="absolute bottom-0 right-2 text-7xl text-cyan-200 font-serif leading-none rotate-180">"</span>
                   </div>
                 </div>
               </div>
@@ -186,9 +186,9 @@ Do NOT attempt to pass the history logs into the tool parameters.`;
             </div>
           ) : (
              <div className="flex flex-col items-center justify-center h-full text-slate-500 py-32 bg-slate-50">
-              <Activity className="w-20 h-20 animate-spin text-indigo-600 mb-6" />
-              <h2 className="text-2xl font-bold text-indigo-900 mb-2">Armoring patient data...</h2>
-              <p className="text-lg animate-pulse text-indigo-600">Cross-referencing logs and telemetry.</p>
+              <Activity className="w-20 h-20 animate-spin text-cyan-600 mb-6" />
+              <h2 className="text-2xl font-bold text-cyan-900 mb-2">Armoring patient data...</h2>
+              <p className="text-lg animate-pulse text-cyan-600">Cross-referencing logs and telemetry.</p>
             </div>
           )}
         </div>
