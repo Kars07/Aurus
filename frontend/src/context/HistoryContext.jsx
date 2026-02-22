@@ -41,7 +41,7 @@ export const HistoryProvider = ({ children }) => {
       id: Date.now().toString(),
       timestamp: new Date().toISOString()
     };
-    
+
     setHistory(prev => [tempEntry, ...prev]);
 
     // Save to MongoDB
@@ -54,15 +54,15 @@ export const HistoryProvider = ({ children }) => {
             'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify({
-             type: tempEntry.type || 'snapshot',
-             data: tempEntry.data
+            type: tempEntry.type || 'snapshot',
+            data: tempEntry.data
           })
         });
-        
+
         if (!res.ok) {
           throw new Error('Failed to save report to DB');
         }
-        
+
         // Optionally fetch history again to get real Mongo _id
         const newReport = await res.json();
         setHistory(prev => prev.map(item => item.id === tempEntry.id ? newReport.report : item));

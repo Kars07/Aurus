@@ -13,36 +13,36 @@ export const DoctorProvider = ({ children }) => {
       const res = await fetch('https://auris-w1og.onrender.com/api/reports', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      
+
       if (!res.ok) throw new Error('Failed to fetch DB reports');
       const data = await res.json();
-      
+
       const realReports = [];
       const reportPromises = data.reports.map(async (entry, i) => {
         if (!entry.data) return null;
-        
+
         const patientUser = entry.userId || {};
         const bio = patientUser.bioData || {};
-        
+
         // Fetch messages for this patient
         let messages = [];
         try {
           if (patientUser._id) {
-             const mRes = await fetch(`https://auris-w1og.onrender.com/api/messages/${patientUser._id}`, {
-               headers: { 'Authorization': `Bearer ${token}` }
-             });
-             const mData = await mRes.json();
-             // Map backend messages to UI structure
-             messages = (mData.messages || []).map(m => ({
-               id: m._id,
-               from: m.senderId === patientUser._id ? 'patient' : 'doctor',
-               text: m.text,
-               time: new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-               date: new Date(m.timestamp).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }),
-               read: true // Assuming read for simplicity here
-             }));
+            const mRes = await fetch(`https://auris-w1og.onrender.com/api/messages/${patientUser._id}`, {
+              headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const mData = await mRes.json();
+            // Map backend messages to UI structure
+            messages = (mData.messages || []).map(m => ({
+              id: m._id,
+              from: m.senderId === patientUser._id ? 'patient' : 'doctor',
+              text: m.text,
+              time: new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+              date: new Date(m.timestamp).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }),
+              read: true // Assuming read for simplicity here
+            }));
           }
-        } catch(e) { console.error("Could not fetch messages for patient:", e) }
+        } catch (e) { console.error("Could not fetch messages for patient:", e) }
 
         return {
           id: `real_${entry._id || i}`,
@@ -60,9 +60,9 @@ export const DoctorProvider = ({ children }) => {
           riskLevel: 'See Report',
           riskColor: 'bg-cyan-100 text-cyan-700',
           report: {
-            hpi:        entry.data?.patient_status?.hpi || entry.data?.hpi || entry.data?.clinical_history || '—',
+            hpi: entry.data?.patient_status?.hpi || entry.data?.hpi || entry.data?.clinical_history || '—',
             assessment: entry.data?.prevention_flags || entry.data?.demanded_tests || entry.data?.risk_factors || [],
-            plan:       (entry.data?.patient_status?.plan || entry.data?.script || entry.data?.recommended_actions || '').split('\n').filter(Boolean),
+            plan: (entry.data?.patient_status?.plan || entry.data?.script || entry.data?.recommended_actions || '').split('\n').filter(Boolean),
             suggestedQuestions: entry.data?.patient_questions_for_doctor || [],
             aurisInsight: entry.data?.patient_status?.assessment || entry.data?.assessment || entry.data?.advocate_brief || entry.data?.flare_analysis || 'AI-generated clinical summary.',
             raw: entry.data,
@@ -92,15 +92,15 @@ export const DoctorProvider = ({ children }) => {
   const sendMessage = async (patientId, text, recordId) => {
     try {
       if (!patientId || patientId.startsWith('real_')) {
-         console.error("Critical: Tried sending a message without a valid patient DB ID", patientId);
-         return;
+        console.error("Critical: Tried sending a message without a valid patient DB ID", patientId);
+        return;
       }
 
       const res = await fetch('https://auris-w1og.onrender.com/api/messages', {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` 
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           receiverId: patientId,
@@ -111,9 +111,9 @@ export const DoctorProvider = ({ children }) => {
       if (res.ok) {
         // Refresh completely to grab new chat state
         // Alternatively could optimistically append, but refreshing ensures sync.
-        fetchRealReports(); 
+        fetchRealReports();
       }
-    } catch(e) {
+    } catch (e) {
       console.error("Failed to post message", e);
     }
   };

@@ -123,8 +123,8 @@ const DoctorChat = () => {
               key={doc._id}
               onClick={() => setSelectedDoctorId(doc._id)}
               className={`w-full flex items-center gap-3 p-3 rounded-2xl transition-all ${selectedDoctorId === doc._id
-                  ? 'bg-[#06b6d4] text-white shadow-md shadow-cyan-200'
-                  : 'bg-white hover:bg-cyan-50 border border-slate-100'
+                ? 'bg-[#06b6d4] text-white shadow-md shadow-cyan-200'
+                : 'bg-white hover:bg-cyan-50 border border-slate-100'
                 }`}
             >
               <div className="w-10 h-10 rounded-full bg-white/20 flex flex-shrink-0 justify-center items-center">

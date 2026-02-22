@@ -11,18 +11,18 @@ const ChatPage = () => {
 
   const fetchAdvocateBrief = async () => {
     setLoading(true);
-    
+
     const journalLogs = history
       .filter(h => h.type === 'journal')
       .slice(0, 15)
       .map(h => `[${new Date(h.timestamp).toLocaleString()}] Transcript: "${h.transcript}" | Nudge Delivered: "${h.nudge}"`)
       .join('\n');
-      
+
     const systemPrompt = `You are a hostile, patient-side medical advocate AI. Here are the patient's recent history logs:\n${journalLogs}\n\nYou MUST call the 'auris_reasoning' tool with these exact parameters:
 - mode: "advocate"
 
 Do NOT attempt to pass the history logs into the tool parameters.`;
-    
+
     try {
       const response = await fetch('https://auris-w1og.onrender.com/api/ai/chat/completions', {
         method: 'POST',
@@ -34,10 +34,10 @@ Do NOT attempt to pass the history logs into the tool parameters.`;
           stream: false
         })
       });
-      
+
       const responseData = await response.json();
       let content = responseData.choices[0].message.content;
-      
+
       const firstBrace = content.indexOf('{');
       const lastBrace = content.lastIndexOf('}');
       if (firstBrace !== -1 && lastBrace !== -1) {
@@ -45,10 +45,10 @@ Do NOT attempt to pass the history logs into the tool parameters.`;
       } else {
         throw new Error("No JSON object found.");
       }
-      
+
       const parsedData = JSON.parse(content);
       setData(parsedData);
-      
+
       // Save it to the timeline history
       addEntry({
         type: 'snapshot',
@@ -117,8 +117,8 @@ Do NOT attempt to pass the history logs into the tool parameters.`;
             {loading ? <Activity className="w-5 h-5 mr-3 animate-spin" /> : <Shield className="w-5 h-5 mr-3" />}
             {loading ? 'Synthesizing Argument...' : 'Generate New Brief'}
           </button>
-          
-          <button 
+
+          <button
             disabled={!data || loading}
             onClick={handleExportPDF}
             className="px-6 py-4 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold rounded-xl transition-all flex items-center justify-center disabled:opacity-50 shadow-sm"
@@ -138,7 +138,7 @@ Do NOT attempt to pass the history logs into the tool parameters.`;
             </div>
           ) : data ? (
             <div className="p-8 md:p-12 space-y-8 text-slate-900 bg-white">
-              
+
               <div className="border-b-4 border-cyan-900 pb-4 mb-8">
                 <h1 className="text-4xl font-black uppercase text-cyan-900 mb-2">Patient Advocate Brief</h1>
                 <div className="flex justify-between text-sm font-bold text-slate-500">
@@ -162,7 +162,7 @@ Do NOT attempt to pass the history logs into the tool parameters.`;
                   <ul className="space-y-4">
                     {data.demanded_tests.map((test, i) => (
                       <li key={i} className="flex items-start">
-                        <span className="w-8 h-8 rounded-full bg-rose-200 text-rose-800 flex items-center justify-center text-sm font-bold mr-4 flex-shrink-0">{i+1}</span>
+                        <span className="w-8 h-8 rounded-full bg-rose-200 text-rose-800 flex items-center justify-center text-sm font-bold mr-4 flex-shrink-0">{i + 1}</span>
                         <span className="text-rose-950 font-medium text-lg pt-0.5">{test}</span>
                       </li>
                     ))}
@@ -185,7 +185,7 @@ Do NOT attempt to pass the history logs into the tool parameters.`;
 
             </div>
           ) : (
-             <div className="flex flex-col items-center justify-center h-full text-slate-500 py-32 bg-slate-50">
+            <div className="flex flex-col items-center justify-center h-full text-slate-500 py-32 bg-slate-50">
               <Activity className="w-20 h-20 animate-spin text-cyan-600 mb-6" />
               <h2 className="text-2xl font-bold text-cyan-900 mb-2">Armoring patient data...</h2>
               <p className="text-lg animate-pulse text-cyan-600">Cross-referencing logs and telemetry.</p>
